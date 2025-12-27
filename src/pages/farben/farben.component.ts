@@ -20,14 +20,14 @@ type ColorKey = keyof typeof COLORS;
     <!-- CONFIG MODE -->
     @if (status() === 'config') {
       <div class="flex flex-col items-center justify-center min-h-[60vh] animate-enter">
-        <div class="w-full max-w-md bg-[#e8e8e8] rounded-3xl p-8 shadow-sm border border-black/5 transition-all">
+        <div class="w-full max-w-md bg-[#151A23] rounded-3xl p-8 shadow-xl border border-white/5 transition-all">
             
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h1 class="text-2xl font-bold text-[#333333]">Farben</h1>
-                    <p class="text-[#666666]">Stroop effect trainer</p>
+                    <h1 class="text-2xl font-bold text-[#F1F5F9]">Farben</h1>
+                    <p class="text-[#94A3B8]">Stroop effect trainer</p>
                 </div>
-                <div class="w-12 h-12 bg-[#f3f3f3] rounded-xl flex items-center justify-center text-[#5076a3] shadow-inner">
+                <div class="w-12 h-12 bg-[#0B0E14] border border-white/5 rounded-xl flex items-center justify-center text-[#3B82F6] shadow-inner">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
                     </svg>
@@ -36,62 +36,62 @@ type ColorKey = keyof typeof COLORS;
 
             <div class="space-y-4">
                 <!-- Interval Speed -->
-                <div class="bg-[#f3f3f3] p-4 rounded-xl">
+                <div class="bg-[#0B0E14] border border-white/5 p-4 rounded-xl">
                     <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-[#666666] text-sm uppercase tracking-wider">Speed</label>
-                        <span class="font-mono text-[#333333] font-bold">{{ intervalMs() }}ms</span>
+                        <label class="font-bold text-[#94A3B8] text-sm uppercase tracking-wider">Speed</label>
+                        <span class="font-mono text-[#F1F5F9] font-bold">{{ intervalMs() }}ms</span>
                     </div>
                     <input type="range" min="250" max="5000" step="250"
                            [ngModel]="intervalMs()" (ngModelChange)="intervalMs.set($event)"
-                           class="w-full h-2 bg-[#e1e1e1] rounded-lg appearance-none cursor-pointer accent-[#5076a3]" />
+                           class="w-full h-2 bg-[#2A3441] rounded-lg appearance-none cursor-pointer accent-[#3B82F6]" />
                 </div>
 
                 <!-- Step Limit -->
-                <div class="bg-[#f3f3f3] p-4 rounded-xl">
-                    <label class="block font-bold text-[#666666] text-sm uppercase tracking-wider mb-2">Amount of Changes</label>
+                <div class="bg-[#0B0E14] border border-white/5 p-4 rounded-xl">
+                    <label class="block font-bold text-[#94A3B8] text-sm uppercase tracking-wider mb-2">Amount of Changes</label>
                     <input type="number" 
                            [ngModel]="limitSteps()" 
                            (ngModelChange)="limitSteps.set($event)"
                            placeholder="Infinite (leave empty)"
-                           class="w-full px-3 py-2 rounded-lg bg-white border border-transparent focus:border-[#5076a3] outline-none text-[#333333] text-sm transition-colors placeholder:text-gray-400" />
+                           class="w-full px-3 py-2 rounded-lg bg-[#151A23] border border-white/10 focus:border-[#3B82F6] outline-none text-[#F1F5F9] text-sm transition-colors placeholder:text-gray-600" />
                 </div>
 
                 <!-- Toggles Grid -->
                 <div class="grid grid-cols-1 gap-3">
                     <!-- No Colors -->
-                    <div class="flex items-center justify-between p-4 bg-[#f3f3f3] rounded-xl cursor-pointer hover:bg-[#e1e1e1]/50 transition-colors" (click)="toggleNoColors()">
+                    <div class="flex items-center justify-between p-4 bg-[#0B0E14] border border-white/5 rounded-xl cursor-pointer hover:bg-[#2A3441] transition-colors" (click)="toggleNoColors()">
                         <div>
-                            <div class="font-semibold text-[#333333]">No Colors</div>
-                            <div class="text-xs text-[#666666]">Text only mode</div>
+                            <div class="font-semibold text-[#F1F5F9]">No Colors</div>
+                            <div class="text-xs text-[#94A3B8]">Text only mode</div>
                         </div>
                         <button class="w-12 h-7 rounded-full transition-colors relative"
-                                [class]="noColors() ? 'bg-[#5076a3]' : 'bg-[#e1e1e1]'">
+                                [class]="noColors() ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'">
                             <div class="w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform"
                                  [class]="noColors() ? 'left-6' : 'left-1'"></div>
                         </button>
                     </div>
 
                     <!-- No Duplicates -->
-                    <div class="flex items-center justify-between p-4 bg-[#f3f3f3] rounded-xl cursor-pointer hover:bg-[#e1e1e1]/50 transition-colors" (click)="togglePreventDuplicates()">
+                    <div class="flex items-center justify-between p-4 bg-[#0B0E14] border border-white/5 rounded-xl cursor-pointer hover:bg-[#2A3441] transition-colors" (click)="togglePreventDuplicates()">
                          <div>
-                            <div class="font-semibold text-[#333333]">No Duplicates</div>
-                            <div class="text-xs text-[#666666]">Unique sequence</div>
+                            <div class="font-semibold text-[#F1F5F9]">No Duplicates</div>
+                            <div class="text-xs text-[#94A3B8]">Unique sequence</div>
                         </div>
                         <button class="w-12 h-7 rounded-full transition-colors relative"
-                                [class]="preventDuplicateWords() ? 'bg-[#5076a3]' : 'bg-[#e1e1e1]'">
+                                [class]="preventDuplicateWords() ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'">
                             <div class="w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform"
                                  [class]="preventDuplicateWords() ? 'left-6' : 'left-1'"></div>
                         </button>
                     </div>
 
                     <!-- Play Sound -->
-                    <div class="flex items-center justify-between p-4 bg-[#f3f3f3] rounded-xl cursor-pointer hover:bg-[#e1e1e1]/50 transition-colors" (click)="togglePlaySound()">
+                    <div class="flex items-center justify-between p-4 bg-[#0B0E14] border border-white/5 rounded-xl cursor-pointer hover:bg-[#2A3441] transition-colors" (click)="togglePlaySound()">
                         <div>
-                            <div class="font-semibold text-[#333333]">Sound</div>
-                            <div class="text-xs text-[#666666]">Beep on change</div>
+                            <div class="font-semibold text-[#F1F5F9]">Sound</div>
+                            <div class="text-xs text-[#94A3B8]">Beep on change</div>
                         </div>
                         <button class="w-12 h-7 rounded-full transition-colors relative"
-                                [class]="playSound() ? 'bg-[#5076a3]' : 'bg-[#e1e1e1]'">
+                                [class]="playSound() ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'">
                             <div class="w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform"
                                  [class]="playSound() ? 'left-6' : 'left-1'"></div>
                         </button>
@@ -99,16 +99,16 @@ type ColorKey = keyof typeof COLORS;
                 </div>
 
                 <!-- Custom Words -->
-                <div class="bg-[#f3f3f3] p-4 rounded-xl">
-                    <label class="block font-bold text-[#666666] text-sm uppercase tracking-wider mb-3">Custom Words</label>
+                <div class="bg-[#0B0E14] border border-white/5 p-4 rounded-xl">
+                    <label class="block font-bold text-[#94A3B8] text-sm uppercase tracking-wider mb-3">Custom Words</label>
                     <div class="space-y-2 max-h-32 overflow-y-auto pr-1">
                         @for (label of customLabels(); track $index) {
                             <div class="flex gap-2">
                                 <input [ngModel]="label" (ngModelChange)="updateLabel($index, $event)"
                                        placeholder="Add word..."
-                                       class="flex-1 px-3 py-2 rounded-lg bg-white border border-transparent focus:border-[#5076a3] outline-none text-sm transition-colors" />
+                                       class="flex-1 px-3 py-2 rounded-lg bg-[#151A23] border border-white/10 focus:border-[#3B82F6] outline-none text-[#F1F5F9] text-sm transition-colors" />
                                 @if ($index < customLabels().length - 1) {
-                                    <button (click)="removeLabel($index)" class="p-2 text-[#666666] hover:text-[#c46d6d] transition-colors">
+                                    <button (click)="removeLabel($index)" class="p-2 text-[#94A3B8] hover:text-red-400 transition-colors">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                     </button>
                                 }
@@ -119,7 +119,7 @@ type ColorKey = keyof typeof COLORS;
             </div>
 
             <button (click)="startGame()"
-                    class="w-full mt-8 bg-[#5076a3] text-white py-4 rounded-xl text-lg font-bold shadow-lg hover-spring transition-all">
+                    class="w-full mt-8 bg-[#3B82F6] text-white py-4 rounded-xl text-lg font-bold shadow-lg hover-spring transition-all hover:bg-[#2563EB]">
                 Start Training
             </button>
         </div>
@@ -135,7 +135,7 @@ type ColorKey = keyof typeof COLORS;
         <div class="absolute top-6 right-6 z-10 flex gap-4">
              <!-- Stop Button -->
              <button (click)="stopGame()" 
-                     class="group flex items-center gap-2 px-4 py-2 bg-black/20 hover:bg-black/30 backdrop-blur-md rounded-full text-white font-medium transition-all hover:pr-6">
+                     class="group flex items-center gap-2 px-4 py-2 bg-black/40 hover:bg-black/60 backdrop-blur-md rounded-full text-white font-medium transition-all hover:pr-6 border border-white/10">
                 <div class="w-2 h-2 rounded-full bg-red-400 group-hover:animate-pulse"></div>
                 Stop
              </button>
@@ -153,7 +153,7 @@ type ColorKey = keyof typeof COLORS;
   `
 })
 export class FarbenComponent implements OnDestroy {
-  private router = inject(Router);
+  private router: Router = inject(Router);
   private audio = inject(AudioService);
 
   // Persistence Initializers
@@ -197,7 +197,7 @@ export class FarbenComponent implements OnDestroy {
   displayConfig = computed(() => {
     const config = COLORS[this.currentColor()];
     if (this.noColors()) {
-      return { ...config, bgClass: 'bg-slate-900', textClass: 'text-white' };
+      return { ...config, bgClass: 'bg-[#0B0E14]', textClass: 'text-white' };
     }
     return config;
   });

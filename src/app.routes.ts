@@ -4,6 +4,7 @@ import { IntervallComponent } from './pages/intervall/intervall.component';
 import { FarbenComponent } from './pages/farben/farben.component';
 import { KettenrechnerComponent } from './pages/kettenrechner/kettenrechner.component';
 import { TimersComponent } from './pages/timers/timers.component';
+import { SoundCounterComponent } from './pages/sound-counter/sound-counter.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'farben', component: FarbenComponent },
   { path: 'kettenrechner', component: KettenrechnerComponent },
   { path: 'timers', component: TimersComponent },
+  { path: 'sound-counter', component: SoundCounterComponent },
   { path: '**', redirectTo: '' }
 ];

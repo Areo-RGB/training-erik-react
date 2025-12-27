@@ -8,20 +8,19 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-      /* Custom Theme Config matching the original React app */
+      /* Custom Theme Config matching the Dark Blue design */
       :root {
-        --color-canvas: #f3f3f3;
-        --color-surface: #e8e8e8;
-        --color-subtle: #e1e1e1;
-        --color-primary: #333333;
-        --color-secondary: #666666;
-        --color-action: #5076a3;
-        --color-success: #8baa8b;
-        --color-icon: #90778d;
-        --color-mutedRed: #c46d6d;
-        --color-mutedOrange: #d4a373;
-        --color-mutedBlue: #5076a3;
-        --color-mutedGreen: #8baa8b;
+        --color-canvas: #0B0E14;
+        --color-surface: #151A23;
+        --color-surface-hover: #1E2532;
+        --color-subtle: #2A3441;
+        --color-primary: #F1F5F9;
+        --color-secondary: #94A3B8;
+        --color-action: #3B82F6;
+        --color-success: #10B981;
+        --color-icon: #64748B;
+        --color-mutedRed: #EF4444;
+        --color-mutedOrange: #F97316;
       }
       body {
         font-family: 'Inter', sans-serif;
@@ -62,13 +61,14 @@
       .hover-spring {
         transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
                     background-color 0.2s ease,
-                    box-shadow 0.2s ease;
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
       }
       .hover-spring:hover {
-        transform: scale(1.02) translateY(-2px);
+        transform: scale(1.01) translateY(-1px);
       }
       .hover-spring:active {
-        transform: scale(0.96) translateY(0);
+        transform: scale(0.98) translateY(0);
       }
       
       .btn-press {
@@ -78,17 +78,13 @@
         transform: scale(0.95);
       }
 
-      /* Old utilities kept for compatibility if needed, but overridden mostly */
-      .animate-fadeIn {
-        animation: enter-up 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      .animate-celebrate {
+        animation: celebrate 0.5s ease-out forwards;
       }
       @keyframes celebrate {
         0% { transform: scale(0.8); opacity: 0; }
         50% { transform: scale(1.2); opacity: 1; }
         100% { transform: scale(1); opacity: 1; }
-      }
-      .animate-celebrate {
-        animation: celebrate 0.5s ease-out forwards;
       }
     </style>
   <script type="importmap">
