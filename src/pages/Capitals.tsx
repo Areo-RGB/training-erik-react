@@ -244,18 +244,14 @@ export default function Capitals() {
         <div className="flex flex-col items-center justify-center flex-1 w-full max-w-4xl">
           {/* Question section - fixed height */}
           <div className="h-[200px] md:h-[280px] flex flex-col items-center justify-center">
-            <p className="text-xl md:text-2xl text-[#94A3B8] mb-4">Was ist die Hauptstadt von</p>
-            <h2 className="text-4xl md:text-7xl font-black text-center text-[#F1F5F9] leading-tight">
+            <h2 className="text-5xl md:text-8xl font-black text-center text-[#F1F5F9] leading-tight">
               {currentQuestion.country}
             </h2>
           </div>
 
           {/* Answer section - fixed height, always rendered */}
           <div className="h-[120px] md:h-[150px] flex flex-col items-center justify-center">
-            <p className={`text-lg md:text-xl text-[#64748B] mb-2 transition-opacity duration-200 ${showAnswer ? 'opacity-100' : 'opacity-0'}`}>
-              Die Hauptstadt ist
-            </p>
-            <h3 className={`text-3xl md:text-5xl font-bold text-[#10B981] transition-all duration-200 ${showAnswer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+            <h3 className={`text-4xl md:text-6xl font-bold text-[#10B981] transition-all duration-200 ${showAnswer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
               {currentQuestion.capital}
             </h3>
           </div>
@@ -285,15 +281,14 @@ export default function Capitals() {
       <div className="flex flex-col items-center justify-center text-center w-full">
         {/* Question section - fixed height */}
         <div className="h-[35vh] flex flex-col items-center justify-center">
-          <p className="text-[3vw] lg:text-3xl text-[#94A3B8] mb-4">Was ist die Hauptstadt von</p>
-          <h2 className="text-[10vw] lg:text-9xl font-black text-[#F1F5F9] leading-none">
+          <h2 className="text-[12vw] lg:text-[10rem] font-black text-[#F1F5F9] leading-none">
             {currentQuestion.country}
           </h2>
         </div>
 
         {/* Answer section - fixed height, always rendered */}
         <div className="h-[25vh] flex flex-col items-center justify-center">
-          <h3 className={`text-[8vw] lg:text-8xl font-bold text-[#10B981] leading-none transition-all duration-200 ${showAnswer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          <h3 className={`text-[10vw] lg:text-9xl font-bold text-[#10B981] leading-none transition-all duration-200 ${showAnswer ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             {currentQuestion.capital}
           </h3>
         </div>
