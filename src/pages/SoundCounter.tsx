@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { useLocalStorageNumber } from '../hooks/useLocalStorage'
+import { useLocalStorageNumber, useLocalStorageString } from '../hooks/useLocalStorage'
 
 export default function SoundCounter() {
   const [threshold, setThreshold] = useLocalStorageNumber('sound_counter_threshold', 50)
   const [cooldown, setCooldown] = useLocalStorageNumber('sound_counter_cooldown', 500)
+  const [selectedDeviceId, setSelectedDeviceId] = useLocalStorageString('sound_counter_device_id', 'default')
   
   const [hasPermission, setHasPermission] = useState(false)
   const [error, setError] = useState('')
@@ -13,6 +14,7 @@ export default function SoundCounter() {
   const [count, setCount] = useState(0)
   const [rate, setRate] = useState(0)
   const [isTriggered, setIsTriggered] = useState(false)
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([])
 
   const audioContextRef = useRef<AudioContext | null>(null)
   const analyserRef = useRef<AnalyserNode | null>(null)
@@ -21,20 +23,70 @@ export default function SoundCounter() {
   const lastTriggerTimeRef = useRef(0)
   const triggerTimestampsRef = useRef<number[]>([])
 
+  const getDevices = async () => {
+    try {
+      const devs = await navigator.mediaDevices.enumerateDevices()
+      const audioDevs = devs.filter(d => d.kind === 'audioinput')
+      setDevices(audioDevs)
+      
+      // If the stored device ID is no longer available, default to the first one
+      if (selectedDeviceId !== 'default' && !audioDevs.find(d => d.deviceId === selectedDeviceId)) {
+        setSelectedDeviceId('default')
+      }
+    } catch (e) {
+      console.error('Error listing devices:', e)
+    }
+  }
+
+  useEffect(() => {
+    if (hasPermission) {
+      getDevices()
+      navigator.mediaDevices.addEventListener('devicechange', getDevices)
+      return () => {
+        navigator.mediaDevices.removeEventListener('devicechange', getDevices)
+      }
+    }
+  }, [hasPermission])
+
   const requestPermission = async () => {
     try {
-      streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true })
+      // If we have a stored preference, try to use it. Otherwise use default.
+      const constraints = selectedDeviceId && selectedDeviceId !== 'default' 
+        ? { audio: { deviceId: { exact: selectedDeviceId } } } 
+        : { audio: true }
+
+      streamRef.current = await navigator.mediaDevices.getUserMedia(constraints)
       setHasPermission(true)
       setError('')
       initAudio()
     } catch (e: unknown) {
       console.error(e)
+      // Retry with default if specific device failed
+      if (selectedDeviceId !== 'default') {
+        setSelectedDeviceId('default')
+        // We need to wait a bit or just retry immediately? 
+        // Calling requestPermission again might be recursive loop if default also fails, 
+        // but 'default' usually shouldn't fail unless no mic.
+        try {
+           streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true })
+           setHasPermission(true)
+           setError('')
+           initAudio()
+           return
+        } catch (retryErr) {
+           console.error(retryErr)
+        }
+      }
       setError('Could not access microphone. Please check permissions.')
     }
   }
 
   const initAudio = () => {
     if (!streamRef.current) return
+
+    if (audioContextRef.current) {
+      audioContextRef.current.close()
+    }
 
     audioContextRef.current = new AudioContext()
     const source = audioContextRef.current.createMediaStreamSource(streamRef.current)
@@ -48,6 +100,11 @@ export default function SoundCounter() {
   }
 
   const startLoop = () => {
+    // Cancel any existing loop
+    if (frameIdRef.current) {
+      cancelAnimationFrame(frameIdRef.current)
+    }
+
     const loop = () => {
       if (analyserRef.current) {
         const data = new Uint8Array(analyserRef.current.fftSize)
@@ -66,6 +123,28 @@ export default function SoundCounter() {
       frameIdRef.current = requestAnimationFrame(loop)
     }
     frameIdRef.current = requestAnimationFrame(loop)
+  }
+
+  const handleDeviceChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const deviceId = e.target.value
+    setSelectedDeviceId(deviceId)
+    
+    // Stop current stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(t => t.stop())
+    }
+    
+    try {
+      const constraints = deviceId === 'default' 
+        ? { audio: true } 
+        : { audio: { deviceId: { exact: deviceId } } }
+      
+      streamRef.current = await navigator.mediaDevices.getUserMedia(constraints)
+      initAudio()
+    } catch (err) {
+      console.error('Error switching device:', err)
+      setError('Could not switch microphone.')
+    }
   }
 
   const checkThreshold = useCallback((level: number) => {
@@ -162,6 +241,32 @@ export default function SoundCounter() {
                 ></div>
                 <div className="absolute inset-y-0 w-0.5 bg-red-500 z-10" style={{ left: `${threshold}%` }}></div>
                 <span className="relative z-20 font-mono font-bold text-[#F1F5F9] mix-blend-screen">Level: {Math.round(currentLevel)}</span>
+              </div>
+
+              {/* Microphone Selection */}
+              <div>
+                <label className="block text-sm font-bold text-[#94A3B8] mb-2 uppercase tracking-wider">
+                  Microphone
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedDeviceId}
+                    onChange={handleDeviceChange}
+                    className="w-full bg-[#0B0E14] text-[#F1F5F9] border border-white/10 rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors"
+                  >
+                    <option value="default">Default</option>
+                    {devices.map((device) => (
+                       <option key={device.deviceId} value={device.deviceId}>
+                         {device.label || `Microphone ${device.deviceId.slice(0, 5)}...`}
+                       </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#94A3B8]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
               </div>
 
               {/* Threshold Slider */}
