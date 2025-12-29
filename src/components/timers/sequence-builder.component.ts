@@ -7,11 +7,11 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
-      <div class="w-full max-w-lg bg-[#e8e8e8] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div class="p-6 border-b border-black/5 flex justify-between items-center bg-[#f3f3f3]">
-          <h2 class="text-xl font-bold text-[#333333]">Create Sequence</h2>
-          <button (click)="onClose.emit()" class="text-[#666666] hover:text-[#333333]">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-enter opacity-0">
+      <div class="w-full max-w-lg bg-[#1E2532] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-white/10 animate-enter-scale opacity-0">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center bg-[#2A3441]/50">
+          <h2 class="text-xl font-bold text-[#F1F5F9]">Create Sequence</h2>
+          <button (click)="onClose.emit()" class="text-[#94A3B8] hover:text-white">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -21,57 +21,57 @@ import { FormsModule } from '@angular/forms';
 
         <div class="p-6 overflow-y-auto flex-1">
           <div class="mb-6">
-            <label class="block text-sm font-semibold text-[#666666] mb-2">Sequence Name</label>
-            <input [(ngModel)]="name" placeholder="e.g. HIIT Workout" class="w-full p-3 rounded-xl bg-[#f3f3f3] border border-transparent focus:border-[#5076a3] focus:ring-0 outline-none transition-all" />
+            <label class="block text-sm font-semibold text-[#94A3B8] mb-2">Sequence Name</label>
+            <input [(ngModel)]="name" placeholder="e.g. HIIT Workout" class="w-full p-3 rounded-xl bg-[#151A23] border border-white/10 focus:border-[#3B82F6] outline-none transition-all text-white" />
           </div>
 
           <div class="mb-6">
-            <label class="block text-sm font-semibold text-[#666666] mb-2">Add Timer Step</label>
-            <div class="flex gap-4 items-center bg-[#f3f3f3] p-3 rounded-xl">
-              <button (click)="adjustDuration(-5)" class="w-10 h-10 rounded-lg bg-[#e8e8e8] hover:bg-[#e1e1e1] font-bold text-xl">-</button>
-              <div class="flex-1 text-center font-mono text-2xl font-bold">{{ currentDuration() }}s</div>
-              <button (click)="adjustDuration(5)" class="w-10 h-10 rounded-lg bg-[#e8e8e8] hover:bg-[#e1e1e1] font-bold text-xl">+</button>
-              <button (click)="addStep()" class="bg-[#5076a3] text-white p-3 rounded-lg hover:bg-[#406085] transition-colors flex items-center gap-2">
+            <label class="block text-sm font-semibold text-[#94A3B8] mb-2">Add Timer Step</label>
+            <div class="flex gap-4 items-center bg-[#151A23] p-3 rounded-xl border border-white/5">
+              <button (click)="adjustDuration(-5)" class="w-10 h-10 rounded-lg bg-[#2A3441] hover:bg-[#334155] font-bold text-xl text-white">-</button>
+              <div class="flex-1 text-center font-mono text-2xl font-bold text-white">{{ currentDuration() }}s</div>
+              <button (click)="adjustDuration(5)" class="w-10 h-10 rounded-lg bg-[#2A3441] hover:bg-[#334155] font-bold text-xl text-white">+</button>
+              <button (click)="addStep()" class="bg-[#3B82F6] text-white p-3 rounded-lg hover:bg-[#2563EB] transition-colors flex items-center gap-2">
                 <span>Add</span>
               </button>
             </div>
           </div>
 
-          <div class="mb-6 bg-[#f3f3f3] p-4 rounded-xl flex flex-col gap-4">
+          <div class="mb-6 bg-[#151A23] p-4 rounded-xl flex flex-col gap-4 border border-white/5">
             <div class="flex items-center justify-between cursor-pointer" (click)="toggleLoop()">
-              <span class="font-semibold text-[#666666]">Loop Sequence</span>
-              <button class="w-12 h-7 rounded-full transition-colors relative" [class]="loop() ? 'bg-[#5076a3]' : 'bg-[#e1e1e1]'">
+              <span class="font-semibold text-[#94A3B8]">Loop Sequence</span>
+              <button class="w-12 h-7 rounded-full transition-colors relative" [class]="loop() ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'">
                 <div class="w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform" [class]="loop() ? 'left-6' : 'left-1'"></div>
               </button>
             </div>
             @if(loop()) {
-               <div class="animate-fadeIn border-t border-black/5 pt-4">
-                 <label class="block text-sm font-semibold text-[#666666] mb-2">Loop Count (empty = infinite)</label>
-                 <input type="number" [(ngModel)]="loopCount" placeholder="∞" class="w-full p-3 rounded-xl bg-[#e8e8e8] border border-transparent focus:border-[#5076a3] outline-none" />
+               <div class="animate-enter border-t border-white/5 pt-4">
+                 <label class="block text-sm font-semibold text-[#94A3B8] mb-2">Loop Count (empty = infinite)</label>
+                 <input type="number" [(ngModel)]="loopCount" placeholder="∞" class="w-full p-3 rounded-xl bg-[#2A3441] border border-white/10 focus:border-[#3B82F6] outline-none text-white" />
                </div>
             }
           </div>
 
           <div class="space-y-2">
-            <label class="block text-sm font-semibold text-[#666666]">Sequence Steps ({{ steps().length }})</label>
+            <label class="block text-sm font-semibold text-[#94A3B8]">Sequence Steps ({{ steps().length }})</label>
             @if(steps().length === 0) {
-              <div class="text-center py-8 text-[#666666] bg-[#f3f3f3]/50 rounded-xl border-2 border-dashed border-black/5">No steps added yet</div>
+              <div class="text-center py-8 text-[#94A3B8] bg-[#151A23]/50 rounded-xl border-2 border-dashed border-white/10">No steps added yet</div>
             }
             @for (step of steps(); track step.id; let i = $index) {
-              <div class="flex items-center justify-between p-3 bg-[#f3f3f3] rounded-xl animate-fadeIn">
+              <div class="flex items-center justify-between p-3 bg-[#151A23] border border-white/5 rounded-xl animate-enter opacity-0">
                 <div class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-full bg-[#e1e1e1] flex items-center justify-center text-xs font-bold text-[#666666]">{{ i + 1 }}</span>
-                  <span class="font-mono font-bold text-lg">{{ step.duration }}s</span>
+                  <span class="w-6 h-6 rounded-full bg-[#2A3441] flex items-center justify-center text-xs font-bold text-[#94A3B8]">{{ i + 1 }}</span>
+                  <span class="font-mono font-bold text-lg text-white">{{ step.duration }}s</span>
                 </div>
-                <button (click)="removeStep(i)" class="text-[#666666] hover:text-[#c46d6d] p-2">Delete</button>
+                <button (click)="removeStep(i)" class="text-[#94A3B8] hover:text-red-400 p-2">Delete</button>
               </div>
             }
           </div>
         </div>
 
-        <div class="p-6 border-t border-black/5 bg-[#f3f3f3] flex justify-end gap-3">
-          <button (click)="onClose.emit()" class="px-6 py-3 rounded-xl font-medium text-[#666666] hover:bg-[#e1e1e1]">Cancel</button>
-          <button (click)="handleSave()" [disabled]="!name() || steps().length === 0" class="px-6 py-3 rounded-xl font-medium text-white bg-[#5076a3] hover:bg-[#406085] disabled:opacity-50">Save Sequence</button>
+        <div class="p-6 border-t border-white/5 bg-[#2A3441]/50 flex justify-end gap-3">
+          <button (click)="onClose.emit()" class="px-6 py-3 rounded-xl font-medium text-[#94A3B8] hover:bg-[#334155]">Cancel</button>
+          <button (click)="handleSave()" [disabled]="!name() || steps().length === 0" class="px-6 py-3 rounded-xl font-medium text-white bg-[#3B82F6] hover:bg-[#2563EB] disabled:opacity-50 disabled:bg-gray-500">Save Sequence</button>
         </div>
       </div>
     </div>

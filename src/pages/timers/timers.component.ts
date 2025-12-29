@@ -11,7 +11,7 @@ import { SequenceBuilderComponent } from '../../components/timers/sequence-build
   template: `
     <div class="animate-enter">
       <div class="flex flex-col items-center mb-12 relative">
-        <h1 class="text-3xl font-bold text-center text-[#333333]">Timers</h1>
+        <h1 class="text-3xl font-bold text-center text-[#F1F5F9]">Timers</h1>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -27,8 +27,8 @@ import { SequenceBuilderComponent } from '../../components/timers/sequence-build
         <!-- Add Sequence Card -->
         <button (click)="showBuilder.set(true)"
                 [style.animation-delay]="(200 + sequences().length * 100) + 'ms'"
-                class="animate-enter opacity-0 relative bg-[#f3f3f3] border-2 border-dashed border-[#e1e1e1] rounded-xl flex flex-col items-center justify-center min-h-[420px] text-[#666666] hover:border-[#5076a3] hover:text-[#5076a3] hover:bg-[#e1e1e1]/30 transition-all group hover-spring">
-          <div class="w-16 h-16 rounded-full bg-[#e1e1e1] group-hover:bg-white flex items-center justify-center mb-4 transition-colors">
+                class="animate-enter opacity-0 relative bg-[#151A23] border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center min-h-[420px] text-[#94A3B8] hover:border-[#3B82F6] hover:text-[#3B82F6] hover:bg-[#151A23]/50 transition-all group hover-spring">
+          <div class="w-16 h-16 rounded-full bg-[#0B0E14] border border-white/5 group-hover:bg-[#3B82F6]/10 flex items-center justify-center mb-4 transition-colors">
             <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
           <h3 class="text-xl font-bold">Create Sequence</h3>
@@ -50,7 +50,11 @@ export class TimersComponent {
   constructor() {
     const saved = localStorage.getItem('erik_timer_sequences');
     if (saved) {
-      this.sequences.set(JSON.parse(saved));
+      try {
+        this.sequences.set(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse sequences from localStorage", e);
+      }
     }
 
     effect(() => {

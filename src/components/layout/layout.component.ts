@@ -29,7 +29,7 @@ import { signal } from '@angular/core';
                 </svg>
               </div>
               <h1 class="text-sm font-semibold tracking-wide uppercase text-[#94A3B8] group-hover:text-[#F1F5F9]">
-                Back to Menu
+                Zurück zum Menü
               </h1>
             </a>
           </div>

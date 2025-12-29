@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
           Training Erik
         </h1>
         <p class="text-[#94A3B8] text-xs md:text-sm font-medium tracking-wide uppercase">
-          Professional Session Management
+          Professionelles Trainings-Management
         </p>
       </div>
 
@@ -46,6 +46,9 @@ import { CommonModule } from '@angular/common';
                 }
                 @if (tool.icon === 'sound-counter') {
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                }
+                 @if (tool.icon === 'capitals') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 }
               </div>
 
@@ -79,8 +82,8 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
   tools = [
     {
-      title: 'Sound Counter',
-      description: 'Increments a counter when microphone sound level exceeds a configurable threshold.',
+      title: 'Sound-Zähler',
+      description: 'Erhöht einen Zähler, wenn der Geräuschpegel einen Schwellenwert überschreitet.',
       link: '/sound-counter',
       icon: 'sound-counter',
       tags: ['AUDIO', 'TRIGGER'],
@@ -89,39 +92,48 @@ export class HomeComponent {
     },
     {
       title: 'Farben',
-      description: 'Stroop effect trainer. Flashes colors and words to improve reaction speed.',
+      description: 'Stroop-Effekt-Trainer. Farben und Wörter blinken, um die Reaktionsgeschwindigkeit zu verbessern.',
       link: '/farben',
       icon: 'farben',
-      tags: ['COGNITIVE', 'REACTION'],
+      tags: ['KOGNITIV', 'REAKTION'],
       accentGradient: 'from-pink-500 to-rose-600',
       hoverColor: 'group-hover:text-pink-500'
     },
     {
       title: 'Kettenrechner',
-      description: 'Mental math chain calculator. Solve continuous operations.',
+      description: 'Kopfrechnen-Kettenaufgaben. Löse fortlaufende Rechenoperationen.',
       link: '/kettenrechner',
       icon: 'kettenrechner',
-      tags: ['MATH', 'FOCUS'],
+      tags: ['MATHE', 'FOKUS'],
       accentGradient: 'from-emerald-500 to-green-600',
       hoverColor: 'group-hover:text-emerald-500'
     },
     {
-      title: 'Timers',
-      description: 'Interval timers and loop presets for various training sessions.',
+      title: 'Timer',
+      description: 'Intervall-Timer und Schleifen-Voreinstellungen für verschiedene Trainingseinheiten.',
       link: '/timers',
       icon: 'timers',
-      tags: ['UTILITY', 'INTERVAL'],
+      tags: ['WERKZEUG', 'INTERVALL'],
       accentGradient: 'from-orange-500 to-amber-600',
       hoverColor: 'group-hover:text-orange-500'
     },
     {
       title: 'Intervall',
-      description: 'Set custom intervals for audio beep reminders.',
+      description: 'Setze benutzerdefinierte Intervalle für Audio-Erinnerungen.',
       link: '/intervall',
       icon: 'intervall',
-      tags: ['AUDIO', 'PACING'],
+      tags: ['AUDIO', 'TAKT'],
       accentGradient: 'from-purple-500 to-violet-600',
       hoverColor: 'group-hover:text-purple-500'
     },
+    {
+      title: 'Hauptstädte Quiz',
+      description: 'Teste dein Wissen über europäische Hauptstädte mit diesem Zeit-Quiz.',
+      link: '/capitals',
+      icon: 'capitals',
+      tags: ['GEOGRAPHIE', 'GEDÄCHTNIS'],
+      accentGradient: 'from-cyan-500 to-teal-600',
+      hoverColor: 'group-hover:text-cyan-500'
+    }
   ];
 }
