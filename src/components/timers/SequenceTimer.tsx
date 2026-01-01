@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAudio } from '../../hooks/useAudio'
+import { useLocalStorageNumber } from '../../hooks/useLocalStorage'
 
 interface TimerStep {
   id: number
@@ -27,6 +28,9 @@ export default function SequenceTimer({ sequence, onDelete }: SequenceTimerProps
   const [timeLeft, setTimeLeft] = useState(sequence.steps[0]?.duration || 0)
   const [isRunning, setIsRunning] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
+  const [fontSize, setFontSize] = useLocalStorageNumber('sequence_timer_fontSize', 4)
+
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
 
   const getBtnClass = () => {
     if (isRunning) return 'bg-red-500 hover:bg-red-600'
@@ -98,7 +102,7 @@ export default function SequenceTimer({ sequence, onDelete }: SequenceTimerProps
     <div className="relative bg-[#151A23] border border-white/5 rounded-2xl overflow-hidden flex flex-col items-center justify-between min-h-[420px] pb-8 shadow-xl">
       <div className="absolute top-0 w-full h-1 opacity-80 bg-emerald-600"></div>
       
-      <div className="absolute top-2 right-2 flex gap-1 z-10">
+      <div className="absolute top-2 right-2 sm:top-2 sm:right-2 flex gap-1 z-10">
         <button
           onClick={() => onDelete(sequence.id)}
           className="p-2 text-[#94A3B8] hover:text-red-400 transition-colors"
@@ -143,8 +147,17 @@ export default function SequenceTimer({ sequence, onDelete }: SequenceTimerProps
           )}
         </div>
 
-        <div className="text-[4rem] font-bold font-mono tabular-nums text-[#F1F5F9] leading-none my-auto">
+        <div 
+          style={{ fontSize: `${fontSize}rem` }}
+          className="font-bold font-mono tabular-nums text-[#F1F5F9] leading-none my-auto"
+        >
           {timeLeft}s
+        </div>
+        
+        {/* Font Size Controls */}
+        <div className="flex items-center gap-2 opacity-30 hover:opacity-100 transition-opacity mt-2">
+          <button onClick={() => adjustFontSize(-0.5)} className="p-1.5 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] border border-white/10 text-sm">-</button>
+          <button onClick={() => adjustFontSize(0.5)} className="p-1.5 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] border border-white/10 text-sm">+</button>
         </div>
 
         <div className="h-8 mb-4 text-sm text-[#94A3B8]">

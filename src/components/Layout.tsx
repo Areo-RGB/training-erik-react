@@ -29,20 +29,20 @@ export default function Layout() {
 
       {/* Navbar (Hidden on Home) */}
       {!isHome && (
-        <nav className="w-full bg-[#0B0E14]/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5 py-4 mb-4 animate-enter">
-          <div className="max-w-4xl mx-auto px-6 flex items-center gap-4">
+        <nav className="w-full bg-[#0B0E14]/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5 py-3 sm:py-4 mb-4 animate-enter">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center gap-3 sm:gap-4">
             <Link
               to="/"
-              className="flex items-center gap-3 group cursor-pointer text-[#F1F5F9] hover:text-[#3B82F6] transition-colors select-none"
+              className="flex items-center gap-2 sm:gap-3 group cursor-pointer text-[#F1F5F9] hover:text-[#3B82F6] transition-colors select-none"
             >
-              <div className="text-[#3B82F6] group-hover:-translate-x-1 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="text-[#3B82F6] group-hover:-translate-x-1 transition-transform p-1 -ml-1 sm:m-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" className="sm:w-[20px] sm:h-[20px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 12H5"/>
                   <path d="M12 19l-7-7 7-7"/>
                 </svg>
               </div>
-              <h1 className="text-sm font-semibold tracking-wide uppercase text-[#94A3B8] group-hover:text-[#F1F5F9]">
-                Zurück zum Menü
+              <h1 className="text-xs sm:text-sm font-semibold tracking-wide uppercase text-[#94A3B8] group-hover:text-[#F1F5F9]">
+                Zurück
               </h1>
             </Link>
           </div>
@@ -50,15 +50,15 @@ export default function Layout() {
       )}
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-6 py-8 pb-20">
+      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-4 sm:py-8 pb-20 sm:pb-24">
         <Outlet />
       </main>
 
-      {/* Scroll Controls */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 animate-enter delay-500 opacity-0">
+      {/* Scroll Controls - Hidden on mobile where less useful */}
+      <div className="hidden sm:flex fixed bottom-6 right-6 z-50 flex-col gap-3 animate-enter delay-500 opacity-0">
         <button
           onClick={() => scroll(-1)}
-          className="p-3 bg-[#151A23]/90 backdrop-blur-sm border border-white/10 rounded-full text-[#94A3B8] hover:text-white hover:bg-[#3B82F6] hover:border-[#3B82F6] shadow-lg transition-all hover-spring group"
+          className="p-3 bg-[#151A23]/90 backdrop-blur-sm border border-white/10 rounded-full text-[#94A3B8] hover:text-white hover:bg-[#3B82F6] hover:border-[#3B82F6] shadow-lg transition-all hover-spring group touch-manipulation"
           aria-label="Scroll Up"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-y-0.5 transition-transform">
@@ -67,7 +67,7 @@ export default function Layout() {
         </button>
         <button
           onClick={() => scroll(1)}
-          className="p-3 bg-[#151A23]/90 backdrop-blur-sm border border-white/10 rounded-full text-[#94A3B8] hover:text-white hover:bg-[#3B82F6] hover:border-[#3B82F6] shadow-lg transition-all hover-spring group"
+          className="p-3 bg-[#151A23]/90 backdrop-blur-sm border border-white/10 rounded-full text-[#94A3B8] hover:text-white hover:bg-[#3B82F6] hover:border-[#3B82F6] shadow-lg transition-all hover-spring group touch-manipulation"
           aria-label="Scroll Down"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-y-0.5 transition-transform">

@@ -112,50 +112,50 @@ function ToolIcon({ icon }: { icon: string }) {
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8 py-6 animate-enter">
+    <div className="flex flex-col gap-6 sm:gap-8 py-4 sm:py-6 animate-enter">
       {/* Header */}
-      <div className="text-center space-y-2 mb-2">
-        <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
+      <div className="text-center space-y-1.5 sm:space-y-2 mb-2">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-300">
           Training Erik
         </h1>
-        <p className="text-[#94A3B8] text-xs md:text-sm font-medium tracking-wide uppercase">
+        <p className="text-[#94A3B8] text-[10px] sm:text-xs md:text-sm font-medium tracking-wide uppercase">
           Professionelles Trainings-Management
         </p>
       </div>
 
       {/* Tools Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4">
         {tools.map((tool, i) => (
           <Link
             key={tool.title}
             to={tool.link}
             style={{ animationDelay: `${i * 50}ms` }}
-            className="group relative overflow-hidden rounded-xl bg-[#151A23] border border-white/5 hover:border-white/10 transition-all hover-spring animate-enter opacity-0 cursor-pointer h-full"
+            className="group relative overflow-hidden rounded-xl bg-[#151A23] border border-white/5 hover:border-white/10 transition-all hover-spring animate-enter opacity-0 cursor-pointer h-full touch-manipulation active:scale-[0.98]"
           >
             {/* Left Accent Border */}
             <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b group-hover:w-1.5 transition-all ${tool.accentGradient}`}></div>
 
-            <div className="flex items-start p-4 gap-4 h-full">
+            <div className="flex items-start p-3 sm:p-4 gap-3 sm:gap-4 h-full">
               {/* Icon Box */}
-              <div className={`w-10 h-10 rounded-lg bg-[#0B0E14] border border-white/5 flex items-center justify-center text-[#64748B] transition-colors shrink-0 mt-0.5 ${tool.hoverColor}`}>
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#0B0E14] border border-white/5 flex items-center justify-center text-[#64748B] transition-colors shrink-0 mt-0.5 ${tool.hoverColor}`}>
                 <ToolIcon icon={tool.icon} />
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0 flex flex-col h-full justify-between">
                 <div>
-                  <h3 className={`text-base font-bold text-[#F1F5F9] mb-1 transition-colors truncate leading-tight ${tool.hoverColor}`}>
+                  <h3 className={`text-sm sm:text-base font-bold text-[#F1F5F9] mb-1 transition-colors truncate leading-tight ${tool.hoverColor}`}>
                     {tool.title}
                   </h3>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed line-clamp-2 mb-2">
+                  <p className="text-[10px] sm:text-xs text-[#94A3B8] leading-relaxed line-clamp-2 mb-2">
                     {tool.description}
                   </p>
                 </div>
-                
+
                 {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mt-auto">
+                <div className="flex flex-wrap gap-1 sm:gap-1.5 mt-auto">
                   {tool.tags.map(tag => (
-                    <span key={tag} className="px-1.5 py-0.5 rounded-[4px] text-[9px] font-bold tracking-wider bg-[#0B0E14] text-[#64748B] border border-white/5 uppercase">
+                    <span key={tag} className="px-1.5 py-0.5 rounded-[4px] text-[8px] sm:text-[9px] font-bold tracking-wider bg-[#0B0E14] text-[#64748B] border border-white/5 uppercase">
                       {tag}
                     </span>
                   ))}

@@ -5,10 +5,12 @@ export default function SoundCounter() {
   const [threshold, setThreshold] = useLocalStorageNumber('sound_counter_threshold', 50)
   const [cooldown, setCooldown] = useLocalStorageNumber('sound_counter_cooldown', 500)
   const [selectedDeviceId, setSelectedDeviceId] = useLocalStorageString('sound_counter_device_id', 'default')
+  const [fontSize, setFontSize] = useLocalStorageNumber('sound_counter_fontSize', 8)
   
   const [hasPermission, setHasPermission] = useState(false)
   const [error, setError] = useState('')
   const [status, setStatus] = useState<'config' | 'active'>('config')
+  const [isLoadingDevice, setIsLoadingDevice] = useState(false)
   const [viewMode, setViewMode] = useState<'normal' | 'fullscreen'>('normal')
   const [currentLevel, setCurrentLevel] = useState(0)
   const [count, setCount] = useState(0)
@@ -23,7 +25,9 @@ export default function SoundCounter() {
   const lastTriggerTimeRef = useRef(0)
   const triggerTimestampsRef = useRef<number[]>([])
 
-  const getDevices = async () => {
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(4, fontSize + delta))
+
+  const getDevices = useCallback(async () => {
     try {
       const devs = await navigator.mediaDevices.enumerateDevices()
       const audioDevs = devs.filter(d => d.kind === 'audioinput')
@@ -36,7 +40,7 @@ export default function SoundCounter() {
     } catch (e) {
       console.error('Error listing devices:', e)
     }
-  }
+  }, [selectedDeviceId, setSelectedDeviceId])
 
   useEffect(() => {
     if (hasPermission) {
@@ -46,7 +50,7 @@ export default function SoundCounter() {
         navigator.mediaDevices.removeEventListener('devicechange', getDevices)
       }
     }
-  }, [hasPermission])
+  }, [hasPermission, getDevices])
 
   const requestPermission = async () => {
     try {
@@ -128,6 +132,8 @@ export default function SoundCounter() {
   const handleDeviceChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const deviceId = e.target.value
     setSelectedDeviceId(deviceId)
+    setIsLoadingDevice(true)
+    setError('')
     
     // Stop current stream
     if (streamRef.current) {
@@ -144,6 +150,8 @@ export default function SoundCounter() {
     } catch (err) {
       console.error('Error switching device:', err)
       setError('Could not switch microphone.')
+    } finally {
+      setIsLoadingDevice(false)
     }
   }
 
@@ -246,13 +254,14 @@ export default function SoundCounter() {
               {/* Microphone Selection */}
               <div>
                 <label className="block text-sm font-bold text-[#94A3B8] mb-2 uppercase tracking-wider">
-                  Microphone
+                  Microphone {isLoadingDevice && <span className="text-[#3B82F6] animate-pulse">• Switching...</span>}
                 </label>
                 <div className="relative">
                   <select
                     value={selectedDeviceId}
                     onChange={handleDeviceChange}
-                    className="w-full bg-[#0B0E14] text-[#F1F5F9] border border-white/10 rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors"
+                    disabled={isLoadingDevice}
+                    className={`w-full bg-[#0B0E14] text-[#F1F5F9] border border-white/10 rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-[#3B82F6] transition-colors ${isLoadingDevice ? 'opacity-50 cursor-wait' : ''}`}
                   >
                     <option value="default">Default</option>
                     {devices.map((device) => (
@@ -262,11 +271,20 @@ export default function SoundCounter() {
                     ))}
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#94A3B8]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
+                    {isLoadingDevice ? (
+                      <svg className="animate-spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    )}
                   </div>
                 </div>
+                {devices.length === 0 && hasPermission && (
+                  <p className="text-xs text-amber-400 mt-2">No microphones detected. Please connect a microphone.</p>
+                )}
               </div>
 
               {/* Threshold Slider */}
@@ -315,13 +333,22 @@ export default function SoundCounter() {
           {status === 'active' && (
             <div className="animate-enter">
               <div className="relative flex flex-col items-center justify-center">
-                <div className={`text-[8rem] leading-none font-black tabular-nums transition-all duration-75 select-none ${isTriggered ? 'scale-110 text-[#10B981]' : 'text-[#F1F5F9]'}`}>
+                <div 
+                  style={{ fontSize: `${fontSize}rem` }}
+                  className={`leading-none font-black tabular-nums transition-all duration-75 select-none ${isTriggered ? 'scale-110 text-[#10B981]' : 'text-[#F1F5F9]'}`}
+                >
                   {count}
                 </div>
 
                 {/* Rate Display */}
                 <div className="text-xl font-bold text-[#64748B] mb-2 tabular-nums">
                   {rate}/s
+                </div>
+                
+                {/* Font Size Controls */}
+                <div className="flex items-center gap-2 opacity-30 hover:opacity-100 transition-opacity mt-2">
+                  <button onClick={() => adjustFontSize(-1)} className="p-2 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">-</button>
+                  <button onClick={() => adjustFontSize(1)} className="p-2 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">+</button>
                 </div>
 
                 {isTriggered && (
@@ -363,7 +390,7 @@ export default function SoundCounter() {
       {/* Fullscreen Overlay */}
       {viewMode === 'fullscreen' && (
         <div className="fixed inset-0 z-50 bg-[#0B0E14] flex flex-col items-center justify-center animate-enter">
-          <button onClick={() => setViewMode('normal')} className="absolute top-6 right-6 p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5">
+          <button onClick={() => setViewMode('normal')} className="absolute top-16 right-6 sm:top-6 sm:right-6 p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 14 10 14 10 20"></polyline>
               <polyline points="20 10 14 10 14 4"></polyline>
@@ -372,11 +399,20 @@ export default function SoundCounter() {
             </svg>
           </button>
 
-          <div className={`text-[25vw] font-black tabular-nums leading-none transition-all duration-75 select-none ${isTriggered ? 'scale-110 text-[#10B981]' : 'text-[#F1F5F9]'}`}>
+          <div 
+            style={{ fontSize: `${Math.max(fontSize * 2, 15)}vw` }}
+            className={`font-black tabular-nums leading-none transition-all duration-75 select-none ${isTriggered ? 'scale-110 text-[#10B981]' : 'text-[#F1F5F9]'}`}
+          >
             {count}
           </div>
           <div className="text-[5vw] font-bold text-[#64748B] tabular-nums mt-4 opacity-70">
             {rate}/s
+          </div>
+          
+          {/* Font Size Controls */}
+          <div className="absolute bottom-8 flex items-center gap-4 opacity-30 hover:opacity-100 transition-opacity">
+            <button onClick={() => adjustFontSize(-1)} className="p-3 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">-</button>
+            <button onClick={() => adjustFontSize(1)} className="p-3 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">+</button>
           </div>
         </div>
       )}

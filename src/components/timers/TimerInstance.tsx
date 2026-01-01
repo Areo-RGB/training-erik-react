@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAudio } from '../../hooks/useAudio'
+import { useLocalStorageNumber } from '../../hooks/useLocalStorage'
 
 interface TimerInstanceProps {
   title?: string
@@ -19,6 +20,9 @@ export default function TimerInstance({
   const [duration, setDuration] = useState(defaultDuration)
   const [timeLeft, setTimeLeft] = useState(defaultDuration)
   const [isRunning, setIsRunning] = useState(false)
+  const [fontSize, setFontSize] = useLocalStorageNumber('timer_instance_fontSize', 4)
+
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
 
   const theme = color === 'orange'
     ? { bar: 'bg-orange-500', icon: 'text-orange-500', btn: 'bg-orange-600', btnHover: 'hover:bg-orange-500' }
@@ -113,8 +117,17 @@ export default function TimerInstance({
           </div>
         )}
 
-        <div className="text-[4rem] font-bold font-mono tabular-nums text-[#F1F5F9] leading-none my-auto">
+        <div 
+          style={{ fontSize: `${fontSize}rem` }}
+          className="font-bold font-mono tabular-nums text-[#F1F5F9] leading-none my-auto"
+        >
           {timeLeft}s
+        </div>
+        
+        {/* Font Size Controls */}
+        <div className="flex items-center gap-2 opacity-30 hover:opacity-100 transition-opacity mt-2">
+          <button onClick={() => adjustFontSize(-0.5)} className="p-1.5 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] border border-white/10 text-sm">-</button>
+          <button onClick={() => adjustFontSize(0.5)} className="p-1.5 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] border border-white/10 text-sm">+</button>
         </div>
 
         <div className="flex gap-4 w-full mt-auto pt-6">
