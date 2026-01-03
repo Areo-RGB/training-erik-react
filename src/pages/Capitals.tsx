@@ -138,7 +138,7 @@ export default function Capitals() {
   if (status === 'config') {
     return (
       <div className="w-full h-full min-h-[60vh] flex flex-col items-center justify-center relative">
-        <div className="w-full max-w-md bg-[#151A23] rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-xl border border-white/5 text-center transition-all animate-enter">
+        <div className="w-full max-w-md lg:max-w-xl bg-[#151A23] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl border border-white/5 text-center transition-all animate-enter">
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#0B0E14] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-[#3B82F6] border border-white/5 shadow-inner">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" className="sm:w-[32px] sm:h-[32px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>

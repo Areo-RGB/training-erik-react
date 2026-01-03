@@ -86,3 +86,31 @@ body {
   50% { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* Tablet Touch Target Optimization */
+@media (min-width: 1024px) {
+  button.touch-manipulation {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (min-width: 1024px) {
+  .vh-safe {
+    max-height: 100vh;
+    overflow: hidden;
+  }
+}
+
+/* Safe area for notch/camera cutouts */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+.px-safe {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}

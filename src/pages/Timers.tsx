@@ -38,7 +38,7 @@ export default function Timers() {
         <h1 className="text-3xl font-bold text-center text-[#F1F5F9]">Timers</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-4xl lg:max-w-6xl mx-auto">
         {/* Standard Timers */}
         <div className="animate-enter opacity-0" style={{ animationDelay: '0ms' }}>
           <TimerInstance title="Custom Timer" color="blue" defaultDuration={60} />

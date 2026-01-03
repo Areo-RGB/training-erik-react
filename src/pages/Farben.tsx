@@ -16,7 +16,7 @@ type ColorKey = keyof typeof COLORS
 export default function Farben() {
   const { playBeep, resumeAudioContext } = useAudio()
 
-  const [status, setStatus] = useState<'config' | 'playing'>('config')
+  const [status, setStatus] = useState<'config' | 'playing' | 'finished'>('config')
   const [currentColor, setCurrentColor] = useState<ColorKey>('white')
   const [currentStepCount, setCurrentStepCount] = useState(0)
 
@@ -207,6 +207,8 @@ export default function Farben() {
          } else {
              stopAudio()
          }
+     } else if (status === 'finished') {
+         stopAudio()
      }
   }, [status, useSoundCounter, soundControlMode, initAudio, stopAudio])
   
@@ -219,7 +221,7 @@ export default function Farben() {
   // --- Game Loop Logic ---
 
   const stopGame = useCallback(() => {
-    setStatus('config')
+    setStatus('finished')
     setWaitingForFirstSound(false)
     
     if (intervalRef.current) {
@@ -231,11 +233,8 @@ export default function Farben() {
         timerRef.current = null
     }
 
-    // Keep audio if configured to show visualization in config
-    if (!useSoundCounter && !soundControlMode) {
-        stopAudio()
-    }
-  }, [useSoundCounter, soundControlMode, stopAudio])
+    stopAudio()
+  }, [stopAudio])
 
   const startDurationTimer = useCallback(() => {
       if (timerRef.current) clearInterval(timerRef.current)
@@ -333,7 +332,7 @@ export default function Farben() {
   if (status === 'config') {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] animate-enter px-4">
-        <div className="w-full max-w-md bg-[#151A23] rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-xl border border-white/5 transition-all">
+        <div className="w-full max-w-md lg:max-w-xl bg-[#151A23] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-xl border border-white/5 transition-all">
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-[#F1F5F9]">Farben</h1>
@@ -357,8 +356,8 @@ export default function Farben() {
                     <div className="font-semibold text-sm sm:text-base text-[#F1F5F9]">Sound Steuerung</div>
                     <div className="text-[10px] sm:text-xs text-[#94A3B8]">Farbe wechselt bei Geräusch</div>
                 </div>
-                <button className={`w-11 h-6 sm:w-12 sm:h-7 rounded-full transition-colors relative ${soundControlMode ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
-                    <div className={`w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${soundControlMode ? 'left-[1.375rem] sm:left-6' : 'left-1'}`}></div>
+                <button className={`w-11 h-6 sm:w-12 sm:h-7 lg:w-14 lg:h-8 rounded-full transition-colors relative ${soundControlMode ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
+                    <div className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${soundControlMode ? 'left-[1.375rem] sm:left-6 lg:left-7' : 'left-1'}`}></div>
                 </button>
             </div>
 
@@ -410,8 +409,8 @@ export default function Farben() {
                         <div className="font-semibold text-sm sm:text-base text-[#F1F5F9]">Sound Feedback</div>
                         <div className="text-[10px] sm:text-xs text-[#94A3B8]">Piep bei Wechsel</div>
                     </div>
-                    <button className={`w-11 h-6 sm:w-12 sm:h-7 rounded-full transition-colors relative ${playSound ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
-                        <div className={`w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${playSound ? 'left-[1.375rem] sm:left-6' : 'left-1'}`}></div>
+                    <button className={`w-11 h-6 sm:w-12 sm:h-7 lg:w-14 lg:h-8 rounded-full transition-colors relative ${playSound ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
+                        <div className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${playSound ? 'left-[1.375rem] sm:left-6 lg:left-7' : 'left-1'}`}></div>
                     </button>
                 </div>
 
@@ -427,8 +426,8 @@ export default function Farben() {
                             <div className="font-semibold text-sm sm:text-base text-[#F1F5F9]">Sound-Zähler / Input</div>
                             <div className="text-[10px] sm:text-xs text-[#94A3B8]">Zählt bei Lärm hoch</div>
                         </div>
-                        <button className={`w-11 h-6 sm:w-12 sm:h-7 rounded-full transition-colors relative ${useSoundCounter ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
-                            <div className={`w-4 h-4 sm:w-5 sm:h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${useSoundCounter ? 'left-[1.375rem] sm:left-6' : 'left-1'}`}></div>
+                        <button className={`w-11 h-6 sm:w-12 sm:h-7 lg:w-14 lg:h-8 rounded-full transition-colors relative ${useSoundCounter ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
+                            <div className={`w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${useSoundCounter ? 'left-[1.375rem] sm:left-6 lg:left-7' : 'left-1'}`}></div>
                         </button>
                     </div>
 
@@ -499,30 +498,41 @@ export default function Farben() {
     )
   }
 
-  // Playing Mode
+  // Playing or Finished Mode
   return (
     <div className={`fixed inset-0 z-50 flex flex-col h-full transition-colors duration-300 animate-enter ${displayConfig.bgClass}`}>
       
-      {/* Controls */}
-      <div className="absolute top-16 right-2 sm:top-6 sm:right-6 z-30 flex gap-2 sm:gap-4">
-        <button
-          onClick={stopGame}
-          className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-full text-white font-medium transition-all border border-white/10 shadow-lg touch-manipulation"
-        >
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-400 group-hover:animate-pulse"></div>
-          <span className="text-xs sm:text-base">Stopp</span>
-        </button>
+      {/* Controls - Only show in playing or finished */}
+      <div className="absolute top-16 right-2 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-30 flex gap-2 sm:gap-4 lg:gap-6">
+        {status === 'playing' ? (
+            <button
+            onClick={stopGame}
+            className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-full text-white font-medium transition-all border border-white/10 shadow-lg touch-manipulation"
+            >
+            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-400 group-hover:animate-pulse"></div>
+            <span className="text-xs sm:text-base">Stopp</span>
+            </button>
+        ) : (
+             <button
+            onClick={() => setStatus('config')}
+            className="group flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-2 bg-black/30 hover:bg-black/50 backdrop-blur-md rounded-full text-white font-medium transition-all border border-white/10 shadow-lg touch-manipulation"
+            >
+            <span className="text-xs sm:text-base">Menü</span>
+            </button>
+        )}
       </div>
 
-      {/* Progress Counter or Timer */}
-      <div className="absolute top-16 left-2 sm:top-6 sm:left-6 z-30">
-        <div className="px-3 sm:px-4 py-1 sm:py-2 bg-black/30 backdrop-blur-md rounded-full text-white/80 font-mono font-bold border border-white/10 text-xs sm:text-base">
-          {soundControlMode ? `${timeLeft}s` : `${currentStepCount} / ${limitSteps}`}
+      {/* Progress Counter or Timer - Hide in finished if we show big result? Or keep it? keeping it is fine, but focus is on center */}
+      {status === 'playing' && (
+        <div className="absolute top-16 left-2 sm:top-6 sm:left-6 z-30">
+            <div className="px-3 sm:px-4 py-1 sm:py-2 bg-black/30 backdrop-blur-md rounded-full text-white/80 font-mono font-bold border border-white/10 text-xs sm:text-base">
+            {soundControlMode ? `${timeLeft}s` : `${currentStepCount} / ${limitSteps}`}
+            </div>
         </div>
-      </div>
+      )}
 
       {/* Waiting for First Sound Overlay */}
-      {soundControlMode && waitingForFirstSound && (
+      {status === 'playing' && soundControlMode && waitingForFirstSound && (
           <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-sm animate-enter">
               <div className="text-center p-6">
                   <div className="w-24 h-24 bg-[#3B82F6] rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse shadow-[0_0_30px_rgba(59,130,246,0.5)]">
@@ -544,10 +554,25 @@ export default function Farben() {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
               <span 
                 className="text-[10rem] sm:text-[15rem] md:text-[20rem] font-black text-white leading-none select-none tabular-nums" 
-                style={{ WebkitTextStroke: '4px black', textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+                style={{ WebkitTextStroke: '4px black', textShadow: '0 4px 20px rgba(0,0,0,0.5)', paintOrder: 'stroke fill' }}
               >
                   {soundCount}
               </span>
+          </div>
+      )}
+
+      {/* Finished State Overlay */}
+      {status === 'finished' && (
+          <div className="absolute inset-x-0 bottom-20 sm:bottom-32 flex justify-center z-50 animate-enter">
+              <button 
+                onClick={startGame}
+                className="bg-white text-black px-8 py-4 rounded-2xl text-xl font-bold shadow-2xl hover:scale-105 transition-transform flex items-center gap-3"
+              >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+                  </svg>
+                  Noch einmal
+              </button>
           </div>
       )}
 

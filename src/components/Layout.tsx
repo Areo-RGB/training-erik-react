@@ -30,7 +30,7 @@ export default function Layout() {
       {/* Navbar (Hidden on Home) */}
       {!isHome && (
         <nav className="w-full bg-[#0B0E14]/80 backdrop-blur-md sticky top-0 z-50 border-b border-white/5 py-3 sm:py-4 mb-4 animate-enter">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center gap-3 sm:gap-4">
+          <div className="max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-3 sm:gap-4">
             <Link
               to="/"
               className="flex items-center gap-2 sm:gap-3 group cursor-pointer text-[#F1F5F9] hover:text-[#3B82F6] transition-colors select-none"
@@ -50,7 +50,7 @@ export default function Layout() {
       )}
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-4 sm:py-8 pb-20 sm:pb-24">
+      <main className="relative z-10 flex-1 max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-20 sm:pb-24">
         <Outlet />
       </main>
 

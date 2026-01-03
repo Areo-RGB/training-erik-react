@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        'tablet': '1200px',
+        'tablet-lg': '1400px',
+      },
       colors: {
         canvas: '#0B0E14',
         surface: '#151A23',

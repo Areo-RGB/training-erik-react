@@ -124,7 +124,7 @@ export default function Home() {
       </div>
 
       {/* Tools Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
         {tools.map((tool, i) => (
           <Link
             key={tool.title}
@@ -135,19 +135,19 @@ export default function Home() {
             {/* Left Accent Border */}
             <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b group-hover:w-1.5 transition-all ${tool.accentGradient}`}></div>
 
-            <div className="flex items-start p-3 sm:p-4 gap-3 sm:gap-4 h-full">
+            <div className="flex items-start p-3 sm:p-4 lg:p-5 gap-3 sm:gap-4 lg:gap-5 h-full">
               {/* Icon Box */}
-              <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-[#0B0E14] border border-white/5 flex items-center justify-center text-[#64748B] transition-colors shrink-0 mt-0.5 ${tool.hoverColor}`}>
+              <div className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-[#0B0E14] border border-white/5 flex items-center justify-center text-[#64748B] transition-colors shrink-0 mt-0.5 ${tool.hoverColor}`}>
                 <ToolIcon icon={tool.icon} />
               </div>
 
               {/* Content */}
               <div className="flex-1 min-w-0 flex flex-col h-full justify-between">
                 <div>
-                  <h3 className={`text-sm sm:text-base font-bold text-[#F1F5F9] mb-1 transition-colors truncate leading-tight ${tool.hoverColor}`}>
+                  <h3 className={`text-sm sm:text-base lg:text-lg font-bold text-[#F1F5F9] mb-1 transition-colors truncate leading-tight ${tool.hoverColor}`}>
                     {tool.title}
                   </h3>
-                  <p className="text-[10px] sm:text-xs text-[#94A3B8] leading-relaxed line-clamp-2 mb-2">
+                  <p className="text-[10px] sm:text-xs lg:text-sm text-[#94A3B8] leading-relaxed line-clamp-2 mb-2">
                     {tool.description}
                   </p>
                 </div>

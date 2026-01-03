@@ -217,7 +217,7 @@ export default function SoundCounter() {
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-[60vh] animate-enter">
-        <div className="w-full bg-[#151A23] rounded-3xl p-8 shadow-xl border border-white/5 text-center transition-all relative overflow-hidden">
+        <div className="w-full max-w-md lg:max-w-xl mx-auto bg-[#151A23] rounded-3xl p-8 lg:p-10 shadow-xl border border-white/5 text-center transition-all relative overflow-hidden">
           
           {/* Header */}
           <div className="w-20 h-20 bg-[#0B0E14] rounded-full flex items-center justify-center mx-auto mb-6 text-[#3B82F6] border border-white/5 shadow-inner">
@@ -390,7 +390,7 @@ export default function SoundCounter() {
       {/* Fullscreen Overlay */}
       {viewMode === 'fullscreen' && (
         <div className="fixed inset-0 z-50 bg-[#0B0E14] flex flex-col items-center justify-center animate-enter">
-          <button onClick={() => setViewMode('normal')} className="absolute top-16 right-6 sm:top-6 sm:right-6 p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5">
+          <button onClick={() => setViewMode('normal')} className="absolute top-16 right-6 sm:top-6 sm:right-6 lg:top-8 lg:right-8 p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="4 14 10 14 10 20"></polyline>
               <polyline points="20 10 14 10 14 4"></polyline>
@@ -399,8 +399,8 @@ export default function SoundCounter() {
             </svg>
           </button>
 
-          <div 
-            style={{ fontSize: `${Math.max(fontSize * 2, 15)}vw` }}
+          <div
+            style={{ fontSize: `clamp(5rem, ${Math.max(fontSize * 2, 15)}vw, 20rem)` }}
             className={`font-black tabular-nums leading-none transition-all duration-75 select-none ${isTriggered ? 'scale-110 text-[#10B981]' : 'text-[#F1F5F9]'}`}
           >
             {count}
