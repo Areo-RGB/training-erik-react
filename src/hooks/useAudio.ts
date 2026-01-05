@@ -9,7 +9,7 @@ export function useAudio() {
       try {
         const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
         audioContextRef.current = new AudioContextClass()
-      } catch (e) {
+      } catch {
         console.error('AudioContext not supported')
       }
     }

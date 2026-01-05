@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAudio } from '../../hooks/useAudio'
 import { useLocalStorageNumber } from '../../hooks/useLocalStorage'
+import { FONT_SIZE } from '../../constants'
 
 interface TimerStep {
   id: number
@@ -22,15 +23,15 @@ interface SequenceTimerProps {
 
 export default function SequenceTimer({ sequence, onDelete }: SequenceTimerProps) {
   const { playBeep, resumeAudioContext } = useAudio()
-  
+
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [currentLoop, setCurrentLoop] = useState(1)
   const [timeLeft, setTimeLeft] = useState(sequence.steps[0]?.duration || 0)
   const [isRunning, setIsRunning] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
-  const [fontSize, setFontSize] = useLocalStorageNumber('sequence_timer_fontSize', 4)
+  const [fontSize, setFontSize] = useLocalStorageNumber('sequence_timer_fontSize', FONT_SIZE.TIMER)
 
-  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(FONT_SIZE.MIN, fontSize + delta))
 
   const getBtnClass = () => {
     if (isRunning) return 'bg-red-500 hover:bg-red-600'

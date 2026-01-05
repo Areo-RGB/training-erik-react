@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAudio } from '../../hooks/useAudio'
 import { useLocalStorageNumber } from '../../hooks/useLocalStorage'
+import { FONT_SIZE } from '../../constants'
 
 interface TimerInstanceProps {
   title?: string
@@ -9,20 +10,20 @@ interface TimerInstanceProps {
   presets?: number[]
 }
 
-export default function TimerInstance({ 
-  title = 'Timer', 
-  color = 'blue', 
-  defaultDuration = 60, 
-  presets = [] 
+export default function TimerInstance({
+  title = 'Timer',
+  color = 'blue',
+  defaultDuration = 60,
+  presets = [],
 }: TimerInstanceProps) {
   const { playBeep, resumeAudioContext } = useAudio()
-  
+
   const [duration, setDuration] = useState(defaultDuration)
   const [timeLeft, setTimeLeft] = useState(defaultDuration)
   const [isRunning, setIsRunning] = useState(false)
-  const [fontSize, setFontSize] = useLocalStorageNumber('timer_instance_fontSize', 4)
+  const [fontSize, setFontSize] = useLocalStorageNumber('timer_instance_fontSize', FONT_SIZE.TIMER)
 
-  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(FONT_SIZE.MIN, fontSize + delta))
 
   const theme = color === 'orange'
     ? { bar: 'bg-orange-500', icon: 'text-orange-500', btn: 'bg-orange-600', btnHover: 'hover:bg-orange-500' }

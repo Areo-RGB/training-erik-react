@@ -3,13 +3,14 @@ import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber, useLocalStorageBoolean } from '../hooks/useLocalStorage'
 import confetti from 'canvas-confetti'
 import NumberAdjuster from '../components/ui/NumberAdjuster'
+import { KETTENRECHNER, FONT_SIZE } from '../constants'
 
 export default function Kettenrechner() {
   const { playBeep, resumeAudioContext } = useAudio()
-  
-  const [speed, setSpeed] = useLocalStorageNumber('kettenrechner_speed', 5)
-  const [targetSteps, setTargetSteps] = useLocalStorageNumber('kettenrechner_targetSteps', 5)
-  const [fontSize, setFontSize] = useLocalStorageNumber('kettenrechner_fontSize', 6)
+
+  const [speed, setSpeed] = useLocalStorageNumber('kettenrechner_speed', KETTENRECHNER.DEFAULT_SPEED)
+  const [targetSteps, setTargetSteps] = useLocalStorageNumber('kettenrechner_targetSteps', KETTENRECHNER.DEFAULT_STEPS)
+  const [fontSize, setFontSize] = useLocalStorageNumber('kettenrechner_fontSize', FONT_SIZE.KETTENRECHNER)
   const [playBeepOnStep, setPlayBeepOnStep] = useLocalStorageBoolean('kettenrechner_playBeepOnStep', false)
   
   const [status, setStatus] = useState<'config' | 'playing' | 'pending' | 'result'>('config')
@@ -26,9 +27,9 @@ export default function Kettenrechner() {
   const timerRef = useRef<number | null>(null)
   const gameAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  const adjustSpeed = (delta: number) => setSpeed(Math.max(1, Math.min(30, speed + delta)))
-  const adjustTargetSteps = (delta: number) => setTargetSteps(Math.max(1, targetSteps + delta))
-  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
+  const adjustSpeed = (delta: number) => setSpeed(Math.max(KETTENRECHNER.SPEED_MIN, Math.min(KETTENRECHNER.SPEED_MAX, speed + delta)))
+  const adjustTargetSteps = (delta: number) => setTargetSteps(Math.max(KETTENRECHNER.STEPS_MIN, targetSteps + delta))
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(FONT_SIZE.MIN, fontSize + delta))
 
   const stopSound = () => {
     if (gameAudioRef.current) {
@@ -219,15 +220,15 @@ export default function Kettenrechner() {
                 unit="s"
                 onDecrease={() => adjustSpeed(-1)}
                 onIncrease={() => adjustSpeed(1)}
-                min={1}
-                max={30}
+                min={KETTENRECHNER.SPEED_MIN}
+                max={KETTENRECHNER.SPEED_MAX}
               />
               <NumberAdjuster
                 label="Steps"
                 value={targetSteps}
                 onDecrease={() => adjustTargetSteps(-1)}
                 onIncrease={() => adjustTargetSteps(1)}
-                min={1}
+                min={KETTENRECHNER.STEPS_MIN}
               />
 
               <div className="w-full border-t border-white/10 pt-3 sm:pt-4 mt-2">

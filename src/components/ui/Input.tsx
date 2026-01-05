@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, forwardRef, useState } from 'react'
+import { InputHTMLAttributes, forwardRef, useId } from 'react'
 
 type InputVariant = 'default' | 'underline' | 'filled'
 type InputSize = 'sm' | 'md' | 'lg'
@@ -41,7 +41,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const [inputId] = useState(id || `input-${Math.random().toString(36).substr(2, 9)}`)
+    const generatedId = useId()
+    const inputId = id || generatedId
 
     const baseClasses = [
       'w-full outline-none text-[#F1F5F9] placeholder:text-gray-600 transition-all',

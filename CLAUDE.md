@@ -14,6 +14,7 @@ npm install          # Install dependencies
 npm run dev          # Start dev server (http://localhost:5173)
 npm run build        # TypeScript compile + production build
 npm run preview      # Preview production build locally
+npm run test         # Run tests in watch mode
 ```
 
 ### Testing PWA Features
@@ -129,6 +130,7 @@ Create `.env.local` for environment variables (not committed):
 
 - **Language**: German for UI text and domain comments, English for general code comments
 - **No Backend**: Fully client-side, can deploy to any static host
-- **No Testing Framework**: Manual testing via dev server and browser DevTools
+- **Testing**: Vitest with React Testing Library. Run `npm run test` (watch mode) or `npm run test -- --run` (single run)
 - **Vite**: HMR enabled, TypeScript errors shown in browser overlay and terminal
 - **Local Storage**: Use Chrome DevTools > Application > Local Storage to debug persistence
+

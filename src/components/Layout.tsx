@@ -1,10 +1,22 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Outlet, Link, useLocation } from 'react-router-dom'
+
+const menuItems = [
+  { title: 'Home', link: '/' },
+  { title: 'Sound-Zähler', link: '/sound-counter' },
+  { title: 'Farben', link: '/farben' },
+  { title: 'Kettenrechner', link: '/kettenrechner' },
+  { title: 'Timer', link: '/timers' },
+  { title: 'Intervall', link: '/intervall' },
+  { title: 'Hauptstädte Quiz', link: '/capitals' },
+]
 
 export default function Layout() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
   const isHome = location.pathname === '/'
+  const [menuOpen, setMenuOpen] = useState(false)
+
 
   const scroll = (direction: number) => {
     if (scrollContainerRef.current) {
@@ -26,6 +38,60 @@ export default function Layout() {
         <div className="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] bg-blue-900/10 rounded-full blur-[100px]"></div>
         <div className="absolute -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] bg-indigo-900/10 rounded-full blur-[100px]"></div>
       </div>
+
+      {/* Hamburger Menu Button */}
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="fixed top-3 right-3 sm:top-4 sm:right-4 z-[60] p-2.5 sm:p-3 bg-[#151A23]/90 backdrop-blur-sm border border-white/10 rounded-full text-[#94A3B8] hover:text-white hover:bg-[#3B82F6] hover:border-[#3B82F6] shadow-lg transition-all hover-spring touch-manipulation"
+        aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
+        aria-expanded={menuOpen}
+      >
+        {menuOpen ? (
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        )}
+      </button>
+
+      {/* Slide-out Menu */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-[55] bg-black/50 backdrop-blur-sm animate-fade-in"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+      <nav
+        className={`fixed top-0 right-0 z-[58] h-full w-64 sm:w-72 bg-[#151A23]/95 backdrop-blur-md border-l border-white/10 shadow-2xl transform transition-transform duration-300 ease-out ${
+          menuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="pt-16 sm:pt-20 px-4 sm:px-6">
+          <ul className="space-y-1">
+            {menuItems.map((item) => (
+              <li key={item.link}>
+                <Link
+                  to={item.link}
+                  onClick={() => setMenuOpen(false)}
+                  className={`block px-4 py-3 rounded-lg text-sm sm:text-base font-medium transition-all ${
+                    location.pathname === item.link
+                      ? 'bg-[#3B82F6] text-white'
+                      : 'text-[#94A3B8] hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
 
       {/* Navbar (Hidden on Home) */}
       {!isHome && (

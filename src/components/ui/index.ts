@@ -28,3 +28,10 @@ export type { TagProps } from './Tag'
 
 export { default as Modal, ConfirmModal } from './Modal'
 export type { ModalProps, ConfirmModalProps } from './Modal'
+
+export { default as SoundLevelIndicator } from './SoundLevelIndicator'
+export type { SoundLevelIndicatorProps } from './SoundLevelIndicator'
+
+export { default as MicrophoneSelector } from './MicrophoneSelector'
+export type { MicrophoneSelectorProps } from './MicrophoneSelector'
+

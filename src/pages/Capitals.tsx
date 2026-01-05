@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber } from '../hooks/useLocalStorage'
+import { CAPITALS, FONT_SIZE } from '../constants'
 
 const EUROPE_CAPITALS = [
   { country: 'Albanien', capital: 'Tirana' },
@@ -62,10 +63,10 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export default function Capitals() {
   const { playBeep, resumeAudioContext } = useAudio()
-  
-  const [speed, setSpeed] = useLocalStorageNumber('capitals_speed', 4)
-  const [steps, setSteps] = useLocalStorageNumber('capitals_steps', 10)
-  const [fontSize, setFontSize] = useLocalStorageNumber('capitals_fontSize', 5)
+
+  const [speed, setSpeed] = useLocalStorageNumber('capitals_speed', CAPITALS.DEFAULT_SPEED)
+  const [steps, setSteps] = useLocalStorageNumber('capitals_steps', CAPITALS.DEFAULT_STEPS)
+  const [fontSize, setFontSize] = useLocalStorageNumber('capitals_fontSize', FONT_SIZE.CAPITALS)
   
   const [status, setStatus] = useState<'config' | 'playing' | 'finished'>('config')
   const [viewMode, setViewMode] = useState<'normal' | 'fullscreen'>('normal')
@@ -78,7 +79,7 @@ export default function Capitals() {
   const timerRef = useRef<number | null>(null)
   const answerTimeoutRef = useRef<number | null>(null)
 
-  const adjustFontSize = (delta: number) => setFontSize(Math.max(2, fontSize + delta))
+  const adjustFontSize = (delta: number) => setFontSize(Math.max(FONT_SIZE.MIN, fontSize + delta))
 
   const clearTimers = () => {
     if (timerRef.current) clearTimeout(timerRef.current)
