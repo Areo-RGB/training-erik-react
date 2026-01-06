@@ -3,64 +3,7 @@ import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber } from '../hooks/useLocalStorage'
 import { FontSizeControls, GameControlButtons, SliderControl } from '../components/ui'
 import { CAPITALS, FONT_SIZE } from '../constants'
-
-const EUROPE_CAPITALS = [
-  { country: 'Albanien', capital: 'Tirana' },
-  { country: 'Andorra', capital: 'Andorra la Vella' },
-  { country: 'Österreich', capital: 'Wien' },
-  { country: 'Weißrussland', capital: 'Minsk' },
-  { country: 'Belgien', capital: 'Brüssel' },
-  { country: 'Bosnien und Herzegowina', capital: 'Sarajevo' },
-  { country: 'Bulgarien', capital: 'Sofia' },
-  { country: 'Kroatien', capital: 'Zagreb' },
-  { country: 'Zypern', capital: 'Nikosia' },
-  { country: 'Tschechien', capital: 'Prag' },
-  { country: 'Dänemark', capital: 'Kopenhagen' },
-  { country: 'Estland', capital: 'Tallinn' },
-  { country: 'Finnland', capital: 'Helsinki' },
-  { country: 'Frankreich', capital: 'Paris' },
-  { country: 'Deutschland', capital: 'Berlin' },
-  { country: 'Griechenland', capital: 'Athen' },
-  { country: 'Ungarn', capital: 'Budapest' },
-  { country: 'Island', capital: 'Reykjavik' },
-  { country: 'Irland', capital: 'Dublin' },
-  { country: 'Italien', capital: 'Rom' },
-  { country: 'Lettland', capital: 'Riga' },
-  { country: 'Liechtenstein', capital: 'Vaduz' },
-  { country: 'Litauen', capital: 'Vilnius' },
-  { country: 'Luxemburg', capital: 'Luxemburg' },
-  { country: 'Malta', capital: 'Valletta' },
-  { country: 'Moldawien', capital: 'Chisinau' },
-  { country: 'Monaco', capital: 'Monaco' },
-  { country: 'Montenegro', capital: 'Podgorica' },
-  { country: 'Niederlande', capital: 'Amsterdam' },
-  { country: 'Nordmazedonien', capital: 'Skopje' },
-  { country: 'Norwegen', capital: 'Oslo' },
-  { country: 'Polen', capital: 'Warschau' },
-  { country: 'Portugal', capital: 'Lissabon' },
-  { country: 'Rumänien', capital: 'Bukarest' },
-  { country: 'Russland', capital: 'Moskau' },
-  { country: 'San Marino', capital: 'San Marino' },
-  { country: 'Serbien', capital: 'Belgrad' },
-  { country: 'Slowakei', capital: 'Bratislava' },
-  { country: 'Slowenien', capital: 'Ljubljana' },
-  { country: 'Spanien', capital: 'Madrid' },
-  { country: 'Schweden', capital: 'Stockholm' },
-  { country: 'Schweiz', capital: 'Bern' },
-  { country: 'Türkei', capital: 'Ankara' },
-  { country: 'Ukraine', capital: 'Kiew' },
-  { country: 'Vereinigtes Königreich', capital: 'London' },
-  { country: 'Vatikanstadt', capital: 'Vatikanstadt' }
-]
-
-function shuffleArray<T>(array: T[]): T[] {
-  const newArray = [...array]
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[newArray[i], newArray[j]] = [newArray[j], newArray[i]]
-  }
-  return newArray
-}
+import { EUROPE_CAPITALS, shuffleArray } from '@training-erik/shared'
 
 export default function Capitals() {
   const { playBeep, resumeAudioContext } = useAudio()
@@ -68,14 +11,14 @@ export default function Capitals() {
   const [speed, setSpeed] = useLocalStorageNumber('capitals_speed', CAPITALS.DEFAULT_SPEED)
   const [steps, setSteps] = useLocalStorageNumber('capitals_steps', CAPITALS.DEFAULT_STEPS)
   const [fontSize, setFontSize] = useLocalStorageNumber('capitals_fontSize', FONT_SIZE.CAPITALS)
-  
+
   const [status, setStatus] = useState<'config' | 'playing' | 'finished'>('config')
   const [viewMode, setViewMode] = useState<'normal' | 'fullscreen'>('normal')
   const [currentStep, setCurrentStep] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentQuestion, setCurrentQuestion] = useState({ country: '', capital: '' })
-  
+
   const shuffledDataRef = useRef<{ country: string; capital: string }[]>([])
   const timerRef = useRef<number | null>(null)
   const answerTimeoutRef = useRef<number | null>(null)
@@ -92,7 +35,7 @@ export default function Capitals() {
       finishGame()
       return
     }
-    
+
     clearTimers()
     setProgress((stepIndex / gameSteps) * 100)
     setCurrentQuestion(shuffledDataRef.current[stepIndex])
