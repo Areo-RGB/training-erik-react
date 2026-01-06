@@ -247,7 +247,7 @@ export function useMicrophoneInput(options: UseMicrophoneInputOptions = {}): Use
   useEffect(() => {
     if (autoStart && !hasInitializedRef.current) {
       hasInitializedRef.current = true
-      start()
+      queueMicrotask(() => start())
     }
     return () => stop()
   }, [autoStart, start, stop])

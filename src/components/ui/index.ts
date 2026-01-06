@@ -35,3 +35,10 @@ export type { SoundLevelIndicatorProps } from './SoundLevelIndicator'
 export { default as MicrophoneSelector } from './MicrophoneSelector'
 export type { MicrophoneSelectorProps } from './MicrophoneSelector'
 
+export { default as GameControlButtons } from './GameControlButtons'
+
+export { default as FontSizeControls } from './FontSizeControls'
+
+export { default as ProgressIndicator } from './ProgressIndicator'
+
+export { default as NumberPad } from './NumberPad'

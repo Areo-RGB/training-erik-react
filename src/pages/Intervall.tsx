@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber } from '../hooks/useLocalStorage'
+import { Toggle } from '../components/ui'
 
 export default function Intervall() {
   const { playBeep, resumeAudioContext } = useAudio()
@@ -110,15 +111,11 @@ export default function Intervall() {
             />
           </div>
 
-          <div
-            className="flex items-center justify-between p-4 bg-[#0B0E14] border border-white/5 rounded-xl cursor-pointer hover:bg-[#2A3441] transition-colors btn-press"
-            onClick={() => setVolumeBoost(volumeBoost ? 0 : 1)}
-          >
-            <span className="font-semibold text-[#F1F5F9]">Volume Boost</span>
-            <div className={`w-12 h-7 rounded-full transition-colors relative ${volumeBoost ? 'bg-[#3B82F6]' : 'bg-[#2A3441]'}`}>
-              <div className={`w-5 h-5 bg-white rounded-full shadow-sm absolute top-1 transition-transform ${volumeBoost ? 'left-6' : 'left-1'}`}></div>
-            </div>
-          </div>
+          <Toggle
+            enabled={!!volumeBoost}
+            onChange={() => setVolumeBoost(volumeBoost ? 0 : 1)}
+            label="Volume Boost"
+          />
         </div>
 
         <button

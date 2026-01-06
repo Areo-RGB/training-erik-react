@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react'
 import { useLocalStorageNumber, useLocalStorageString } from '../hooks/useLocalStorage'
 import { useMicrophoneInput } from '../hooks/useMicrophoneInput'
-import { SliderControl, SoundLevelIndicator, MicrophoneSelector } from '../components/ui'
+import { SliderControl, SoundLevelIndicator, MicrophoneSelector, FontSizeControls } from '../components/ui'
 import { AUDIO, FONT_SIZE, RATE_TRACKING } from '../constants'
 
 export default function SoundCounter() {
@@ -159,10 +159,11 @@ export default function SoundCounter() {
                 </div>
                 
                 {/* Font Size Controls */}
-                <div className="flex items-center gap-2 opacity-30 hover:opacity-100 transition-opacity mt-2">
-                  <button onClick={() => adjustFontSize(-1)} className="p-2 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">-</button>
-                  <button onClick={() => adjustFontSize(1)} className="p-2 rounded-full bg-[#0B0E14] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">+</button>
-                </div>
+                <FontSizeControls
+                  onDecrease={() => adjustFontSize(-1)}
+                  onIncrease={() => adjustFontSize(1)}
+                  className="mt-2"
+                />
 
                 {mic.isTriggered && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -222,10 +223,11 @@ export default function SoundCounter() {
           </div>
           
           {/* Font Size Controls */}
-          <div className="absolute bottom-8 flex items-center gap-4 opacity-30 hover:opacity-100 transition-opacity">
-            <button onClick={() => adjustFontSize(-1)} className="p-3 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">-</button>
-            <button onClick={() => adjustFontSize(1)} className="p-3 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press border border-white/10">+</button>
-          </div>
+          <FontSizeControls
+            onDecrease={() => adjustFontSize(-1)}
+            onIncrease={() => adjustFontSize(1)}
+            className="absolute bottom-8"
+          />
         </div>
       )}
     </>

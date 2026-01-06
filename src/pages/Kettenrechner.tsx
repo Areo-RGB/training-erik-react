@@ -3,6 +3,12 @@ import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber, useLocalStorageBoolean } from '../hooks/useLocalStorage'
 import confetti from 'canvas-confetti'
 import NumberAdjuster from '../components/ui/NumberAdjuster'
+import { 
+  GameControlButtons, 
+  FontSizeControls, 
+  ProgressIndicator, 
+  NumberPad 
+} from '../components/ui'
 import { KETTENRECHNER, FONT_SIZE } from '../constants'
 
 export default function Kettenrechner() {
@@ -118,10 +124,6 @@ export default function Kettenrechner() {
     setUserAnswer('')
     setIsCorrect(null)
     setShowCelebration(false)
-  }
-
-  const appendDigit = (digit: number) => {
-    setUserAnswer(s => s + digit.toString())
   }
 
   const checkAnswer = () => {
@@ -265,26 +267,23 @@ export default function Kettenrechner() {
               </div>
 
               {!isCountdown && (
-                <div className="mt-4 text-2xl sm:text-3xl font-bold text-[#64748B] tabular-nums animate-enter delay-100">
-                  {currentStep}/{targetSteps}
-                </div>
+                <ProgressIndicator 
+                  current={currentStep} 
+                  total={targetSteps} 
+                  className="mt-4 animate-enter delay-100"
+                />
               )}
             </div>
 
             <div className="mt-8 sm:mt-12 flex flex-col items-center gap-3 sm:gap-4 animate-enter delay-200">
-              <div className="flex items-center gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none">
-                <button onClick={stopGame} className="flex-1 bg-[#2A3441] text-[#94A3B8] px-4 sm:px-6 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold shadow-sm hover:bg-[#334155] hover:text-white transition-all btn-press touch-manipulation">
-                  Stop
-                </button>
-                <button onClick={() => startGame()} className="flex-1 bg-[#3B82F6] text-white px-4 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold shadow-lg hover:bg-[#2563EB] transition-all btn-press touch-manipulation">
-                  Restart
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2 opacity-30 hover:opacity-100 transition-opacity">
-                <button onClick={() => adjustFontSize(-1)} className="p-2 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press touch-manipulation">-</button>
-                <button onClick={() => adjustFontSize(1)} className="p-2 rounded-full bg-[#151A23] text-[#94A3B8] hover:bg-[#2A3441] btn-press touch-manipulation">+</button>
-              </div>
+              <GameControlButtons
+                onStop={stopGame}
+                onRestart={() => startGame()}
+              />
+              <FontSizeControls
+                onDecrease={() => adjustFontSize(-1)}
+                onIncrease={() => adjustFontSize(1)}
+              />
             </div>
           </div>
         )}
@@ -292,35 +291,11 @@ export default function Kettenrechner() {
         {/* PENDING MODE (INPUT) */}
         {status === 'pending' && (
           <div className="flex-1 flex flex-col items-center justify-center w-full animate-enter px-4">
-            <div className="flex flex-col items-center w-full max-w-xs sm:max-w-sm lg:max-w-md">
-              <div className="w-full bg-[#151A23] rounded-xl p-4 mb-4 sm:mb-6 text-center min-h-[4rem] flex items-center justify-center shadow-lg border border-white/5">
-                <span className="text-3xl sm:text-4xl font-bold tabular-nums text-[#F1F5F9]">
-                  {userAnswer || '?'}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4 w-full mb-4 sm:mb-6">
-                {[1,2,3,4,5,6,7,8,9].map((digit, i) => (
-                  <button
-                    key={digit}
-                    onClick={() => appendDigit(digit)}
-                    style={{ animationDelay: `${i * 30}ms` }}
-                    className="animate-enter opacity-0 aspect-square p-3 sm:p-4 lg:p-5 text-xl sm:text-2xl lg:text-3xl font-bold bg-[#1E2532] text-[#F1F5F9] border border-white/5 rounded-xl hover:bg-[#2A3441] hover:-translate-y-0.5 active:translate-y-0 transition-all touch-manipulation"
-                  >
-                    {digit}
-                  </button>
-                ))}
-                <button onClick={() => appendDigit(0)} className="animate-enter delay-300 opacity-0 aspect-square p-3 sm:p-4 lg:p-5 text-xl sm:text-2xl lg:text-3xl font-bold bg-[#1E2532] text-[#F1F5F9] border border-white/5 rounded-xl hover:bg-[#2A3441] hover:-translate-y-0.5 active:translate-y-0 transition-all touch-manipulation">0</button>
-                <button onClick={() => setUserAnswer('')} className="animate-enter delay-300 opacity-0 aspect-square p-3 sm:p-4 lg:p-5 text-lg sm:text-xl lg:text-2xl font-bold bg-red-900/20 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-900/40 hover:-translate-y-0.5 active:translate-y-0 transition-all touch-manipulation">C</button>
-              </div>
-
-              <button
-                onClick={checkAnswer}
-                className="w-full bg-[#10B981] text-white px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold shadow-lg hover:bg-[#059669] hover:-translate-y-0.5 active:translate-y-0 transition-all animate-enter delay-500 opacity-0 touch-manipulation"
-              >
-                Enter
-              </button>
-            </div>
+            <NumberPad
+              value={userAnswer}
+              onChange={setUserAnswer}
+              onSubmit={checkAnswer}
+            />
           </div>
         )}
 
@@ -341,19 +316,12 @@ export default function Kettenrechner() {
               0 {history.join(' ')} = {total}
             </div>
 
-            <div className="mt-6 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 delay-300 animate-enter opacity-0 w-full max-w-xs sm:max-w-none">
-              <button
-                onClick={stopGame}
-                className="w-full sm:w-auto bg-[#2A3441] text-[#94A3B8] px-6 py-3 rounded-xl text-base font-bold shadow-sm hover:bg-[#334155] hover:text-white transition-all btn-press touch-manipulation"
-              >
-                Settings
-              </button>
-              <button
-                onClick={() => startGame()}
-                className="w-full sm:w-auto bg-[#F1F5F9] text-[#0B0E14] px-8 py-3 rounded-xl text-base font-bold shadow-lg hover:bg-white hover:scale-105 transition-all btn-press touch-manipulation"
-              >
-                Restart
-              </button>
+            <div className="mt-6 sm:mt-12 delay-300 animate-enter opacity-0">
+              <GameControlButtons
+                onSettings={stopGame}
+                onRestart={() => startGame()}
+                variant="stacked"
+              />
             </div>
           </div>
         )}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAudio } from '../hooks/useAudio'
 import { useLocalStorageNumber } from '../hooks/useLocalStorage'
+import { FontSizeControls, GameControlButtons, SliderControl } from '../components/ui'
 import { CAPITALS, FONT_SIZE } from '../constants'
 
 const EUROPE_CAPITALS = [
@@ -151,39 +152,22 @@ export default function Capitals() {
           <p className="text-sm sm:text-base text-[#94A3B8] mb-6 sm:mb-8">Teste dein Wissen über die europäischen Hauptstädte.</p>
 
           <div className="space-y-4 sm:space-y-6 mb-6 sm:mb-8 text-left">
-            {/* Speed */}
-            <div className="bg-[#0B0E14] border border-white/5 p-3 sm:p-4 rounded-xl">
-              <div className="flex justify-between items-center mb-2">
-                <label className="font-bold text-[#94A3B8] text-xs sm:text-sm uppercase tracking-wider">Geschwindigkeit</label>
-                <span className="font-mono text-[#F1F5F9] font-bold text-sm sm:text-base">{speed}s</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                value={speed}
-                onChange={(e) => setSpeed(parseInt(e.target.value))}
-                className="w-full h-2 bg-[#2A3441] rounded-lg appearance-none cursor-pointer accent-[#3B82F6]"
-              />
-            </div>
-
-            {/* Steps */}
-            <div className="bg-[#0B0E14] border border-white/5 p-3 sm:p-4 rounded-xl">
-              <div className="flex justify-between items-center mb-2">
-                <label className="font-bold text-[#94A3B8] text-xs sm:text-sm uppercase tracking-wider">Anzahl</label>
-                <span className="font-mono text-[#F1F5F9] font-bold text-sm sm:text-base">{steps}</span>
-              </div>
-              <input
-                type="range"
-                min="5"
-                max="45"
-                step="5"
-                value={steps}
-                onChange={(e) => setSteps(parseInt(e.target.value))}
-                className="w-full h-2 bg-[#2A3441] rounded-lg appearance-none cursor-pointer accent-[#3B82F6]"
-              />
-            </div>
+            <SliderControl
+              label="Geschwindigkeit"
+              value={speed}
+              onChange={setSpeed}
+              min={1}
+              max={10}
+              unit="s"
+            />
+            <SliderControl
+              label="Anzahl"
+              value={steps}
+              onChange={setSteps}
+              min={5}
+              max={45}
+              step={5}
+            />
           </div>
 
           <button
@@ -206,14 +190,11 @@ export default function Capitals() {
           <h2 className="text-2xl sm:text-3xl font-bold text-[#F1F5F9]">Quiz Beendet!</h2>
           <p className="text-sm sm:text-base text-[#94A3B8] mt-2 mb-6 sm:mb-8 px-4">Gut gemacht! Du hast alle {steps} Schritte abgeschlossen.</p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full px-8 sm:px-0">
-            <button onClick={stopGame} className="flex-1 px-6 py-3 rounded-xl bg-[#2A3441] text-[#94A3B8] font-bold hover:bg-[#334155] transition-colors touch-manipulation">
-              Einstellungen
-            </button>
-            <button onClick={startGame} className="flex-1 px-6 py-3 rounded-xl bg-[#3B82F6] text-white font-bold hover:bg-[#2563EB] transition-colors touch-manipulation">
-              Neustart
-            </button>
-          </div>
+          <GameControlButtons
+            onSettings={stopGame}
+            onRestart={startGame}
+            variant="stacked"
+          />
         </div>
       </div>
     )
@@ -230,11 +211,11 @@ export default function Capitals() {
 
         {/* Controls */}
         <div className="absolute top-16 right-2 sm:top-6 sm:right-6 flex gap-1 sm:gap-2">
-          {/* Font Size Controls */}
-          <div className="flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity">
-            <button onClick={() => adjustFontSize(-1)} className="p-2 sm:p-3 bg-[#151A23]/80 backdrop-blur-sm rounded-full text-[#94A3B8] hover:text-white transition-colors border border-white/10 text-base sm:text-lg touch-manipulation" aria-label="Smaller">-</button>
-            <button onClick={() => adjustFontSize(1)} className="p-2 sm:p-3 bg-[#151A23]/80 backdrop-blur-sm rounded-full text-[#94A3B8] hover:text-white transition-colors border border-white/10 text-base sm:text-lg touch-manipulation" aria-label="Larger">+</button>
-          </div>
+          <FontSizeControls
+            onDecrease={() => adjustFontSize(-1)}
+            onIncrease={() => adjustFontSize(1)}
+            size="sm"
+          />
           <button onClick={() => setViewMode('fullscreen')} className="p-2 sm:p-3 bg-[#151A23]/80 backdrop-blur-sm rounded-full text-[#94A3B8] hover:text-white transition-colors border border-white/10 touch-manipulation" aria-label="Vollbild">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="sm:w-[20px] sm:h-[20px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 3 21 3 21 9"></polyline>
@@ -251,7 +232,7 @@ export default function Capitals() {
         </div>
 
         <div className="flex flex-col items-center justify-center flex-1 w-full max-w-4xl px-2">
-          {/* Question section - responsive height */}
+          {/* Question section */}
           <div className="h-[25vh] sm:h-[35vh] md:h-[280px] flex flex-col items-center justify-center">
             <h2
               style={{ fontSize: `clamp(1.5rem, ${Math.min(fontSize, 8)}vw, ${fontSize}rem)` }}
@@ -261,7 +242,7 @@ export default function Capitals() {
             </h2>
           </div>
 
-          {/* Answer section - responsive height */}
+          {/* Answer section */}
           <div className="h-[15vh] sm:h-[20vh] md:h-[150px] flex flex-col items-center justify-center">
             <h3
               style={{ fontSize: `clamp(1rem, ${Math.min(fontSize * 0.75, 6)}vw, ${fontSize * 0.75}rem)` }}
@@ -284,11 +265,10 @@ export default function Capitals() {
     <div className="fixed inset-0 z-50 bg-[#0B0E14] flex flex-col items-center justify-center animate-enter p-2 sm:p-4">
       {/* Top Controls */}
       <div className="absolute top-16 right-2 sm:top-6 sm:right-6 flex gap-1 sm:gap-2">
-        {/* Font Size Controls */}
-        <div className="flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity">
-          <button onClick={() => adjustFontSize(-1)} className="p-3 sm:p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5 text-lg touch-manipulation">-</button>
-          <button onClick={() => adjustFontSize(1)} className="p-3 sm:p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5 text-lg touch-manipulation">+</button>
-        </div>
+        <FontSizeControls
+          onDecrease={() => adjustFontSize(-1)}
+          onIncrease={() => adjustFontSize(1)}
+        />
         {/* Exit Fullscreen Button */}
         <button onClick={() => setViewMode('normal')} className="p-3 sm:p-4 bg-[#151A23] rounded-full text-[#94A3B8] hover:text-[#F1F5F9] hover:bg-[#2A3441] transition-all shadow-sm border border-white/5 touch-manipulation">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" className="sm:w-[24px] sm:h-[24px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -300,9 +280,9 @@ export default function Capitals() {
         </button>
       </div>
 
-      {/* Content - fixed layout */}
+      {/* Content */}
       <div className="flex flex-col items-center justify-center text-center w-full px-2">
-        {/* Question section - responsive height */}
+        {/* Question section */}
         <div className="h-[35vh] sm:h-[40vh] flex flex-col items-center justify-center">
           <h2
             style={{ fontSize: `clamp(2rem, ${Math.min(fontSize * 2, 12)}vw, ${fontSize * 2.5}rem)` }}
@@ -312,7 +292,7 @@ export default function Capitals() {
           </h2>
         </div>
 
-        {/* Answer section - responsive height */}
+        {/* Answer section */}
         <div className="h-[25vh] sm:h-[30vh] flex flex-col items-center justify-center">
           <h3
             style={{ fontSize: `clamp(1.5rem, ${Math.min(fontSize * 1.5, 9)}vw, ${fontSize * 2}rem)` }}

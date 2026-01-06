@@ -14,7 +14,23 @@ npm install          # Install dependencies
 npm run dev          # Start dev server (http://localhost:5173)
 npm run build        # TypeScript compile + production build
 npm run preview      # Preview production build locally
-npm run test         # Run tests in watch mode
+```
+
+### Testing
+```bash
+npm run test                           # Run tests in watch mode
+npm run test -- --run                  # Single run (no watch)
+npm run test -- src/hooks/useAudio     # Run specific test file
+npm run test:ui                        # Vitest UI in browser
+npm run coverage                       # Generate coverage report
+```
+
+### Linting & Formatting
+```bash
+npm run lint         # Run ESLint
+npm run lint:fix     # ESLint with auto-fix
+npm run format       # Format with Prettier
+npm run format:check # Check formatting
 ```
 
 ### Testing PWA Features
@@ -47,7 +63,7 @@ npm run build && npm run preview
 **Component Organization**:
 - `src/pages/` - Page components (one per route)
 - `src/components/` - Shared components (Layout, timer components)
-- `src/hooks/` - Custom hooks (useAudio, useLocalStorage)
+- `src/hooks/` - Custom hooks (useAudio, useLocalStorage, useInterval, useMicrophoneInput, useFontSize)
 
 ### Audio System
 
@@ -59,12 +75,12 @@ Uses Web Audio API exclusively (no audio files):
 
 ### PWA Architecture
 
-- **Service Worker**: Auto-update registration strategy
+- **Service Worker**: Prompt-based update registration (`registerType: 'prompt'`)
 - **Caching**:
   - CacheFirst for static assets and fonts (1-year expiration)
   - Google Fonts, gstatic, and Google Actions sounds cached
   - Offline-first for core functionality
-- **Manifest**: Standalone display, portrait orientation locked
+- **Manifest**: Standalone display, any orientation allowed
 - **Requires HTTPS**: For PWA features and microphone access (localhost OK for dev)
 
 ### Styling System
@@ -130,7 +146,7 @@ Create `.env.local` for environment variables (not committed):
 
 - **Language**: German for UI text and domain comments, English for general code comments
 - **No Backend**: Fully client-side, can deploy to any static host
-- **Testing**: Vitest with React Testing Library. Run `npm run test` (watch mode) or `npm run test -- --run` (single run)
+- **Testing**: Vitest with React Testing Library and jsdom environment. Test setup in `src/test/setup.ts`
 - **Vite**: HMR enabled, TypeScript errors shown in browser overlay and terminal
 - **Local Storage**: Use Chrome DevTools > Application > Local Storage to debug persistence
 
