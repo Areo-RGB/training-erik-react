@@ -1,2 +1,1 @@
-// Types will be added in later phases
-export {}
+export { type GameStatus, type GameConfig, shuffleArray } from './game'
