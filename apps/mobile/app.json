@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Training Erik",
+    "slug": "training-erik",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "training-erik",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "platforms": ["android"],
+    "android": {
+      "package": "com.trainingerik.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0B0E14"
+      }
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
