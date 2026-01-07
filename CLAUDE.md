@@ -4,47 +4,88 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Training Erik is a German-language Progressive Web App (PWA) providing cognitive and physical training tools. Built with React 18, TypeScript, Vite, and Tailwind CSS, it's a fully client-side application with offline support.
+Training Erik is a German-language Progressive Web App (PWA) providing cognitive and physical training tools. The project is organized as a **Turborepo monorepo** containing:
+- **Web App** (`apps/web/`): React 18 PWA with Vite, TypeScript, and Tailwind CSS
+- **Mobile App** (`apps/mobile/`): React Native app with Expo, Expo Router, and Uniwind
+- **Shared Package** (`packages/shared/`): Common hooks, constants, and types
+
+The web app is a fully client-side application with offline support and is deployed to Vercel.
+
+**Production URL**: https://training-erik-react-jbwpwrqyi-asds-projects-d827e0fc.vercel.app
 
 ## Common Commands
 
+**Note**: This project uses Bun as the package manager and Turborepo for monorepo management.
+
 ### Development
 ```bash
-npm install          # Install dependencies
-npm run dev          # Start dev server (http://localhost:5173)
-npm run build        # TypeScript compile + production build
-npm run preview      # Preview production build locally
+bun install          # Install all dependencies
+bun run dev          # Start all apps (web + mobile)
+bun run dev:web      # Start web dev server only (http://localhost:5173)
+bun run dev:mobile   # Start mobile dev server only (Expo)
+bun run build        # Build all apps
+bun run preview      # Preview web production build locally (http://localhost:4173)
 ```
 
-### Testing
+### Web App Specific
 ```bash
-npm run test                           # Run tests in watch mode
-npm run test -- --run                  # Single run (no watch)
-npm run test -- src/hooks/useAudio     # Run specific test file
-npm run test:ui                        # Vitest UI in browser
-npm run coverage                       # Generate coverage report
+cd apps/web
+bun run dev          # Start web dev server
+bun run build        # Build web app for production
+bun run preview      # Preview production build
+bun run test         # Run tests in watch mode
+bun run test:ui      # Vitest UI in browser
+bun run coverage     # Generate coverage report
+```
+
+### Mobile App Specific
+```bash
+cd apps/mobile
+bunx expo start      # Start Expo development server
+bunx expo start -a   # Start and open in Android emulator
 ```
 
 ### Linting & Formatting
 ```bash
-npm run lint         # Run ESLint
-npm run lint:fix     # ESLint with auto-fix
-npm run format       # Format with Prettier
-npm run format:check # Check formatting
+bun run lint         # Run ESLint on all apps
+bun run format       # Format all code with Prettier
+bun run format:check # Check formatting
+bun run clean        # Clean all build artifacts
 ```
 
 ### Testing PWA Features
 ```bash
-npm run build && npm run preview
+bun run build && bun run preview
 # Then use Chrome DevTools:
 # - Application > Service Workers (verify registration)
 # - Application > Manifest (verify installability)
 # - Network > Offline checkbox (test offline mode)
 ```
 
+### Deployment
+```bash
+vercel --prod --yes  # Deploy web app to Vercel production
+```
+
 ## Architecture
 
-### Application Structure
+### Monorepo Structure
+
+```
+training-erik-react/
+├── apps/
+│   ├── web/              # React PWA with Vite
+│   └── mobile/           # React Native with Expo
+├── packages/
+│   └── shared/           # Shared code between apps
+│       ├── hooks/        # useInterval, useStorage (with adapters)
+│       ├── constants/    # Game constants, colors, quiz data
+│       └── types/        # Shared TypeScript types
+├── turbo.json            # Turborepo configuration
+└── vercel.json           # Vercel deployment config
+```
+
+### Web App Structure (`apps/web/`)
 
 **Routing**: Single-page app with React Router DOM. All routes share `<Layout />` component:
 - `/` - Home dashboard with navigation cards
@@ -58,12 +99,37 @@ npm run build && npm run preview
 **State Management**: No global state library. Uses:
 - Local component state (`useState`)
 - URL state (React Router)
-- Local storage via `useLocalStorage` hook for persistence
+- Local storage via `useStorage` hook from shared package
 
 **Component Organization**:
 - `src/pages/` - Page components (one per route)
 - `src/components/` - Shared components (Layout, timer components)
-- `src/hooks/` - Custom hooks (useAudio, useLocalStorage, useInterval, useMicrophoneInput, useFontSize)
+- `src/hooks/` - Web-specific hooks (useAudio, useMicrophoneInput, useFontSize)
+
+### Mobile App Structure (`apps/mobile/`)
+
+**Routing**: Expo Router (file-based routing)
+- `/` - Home screen with navigation cards
+- `/kettenrechner` - Mental math game
+- `/farben` - Stroop effect trainer
+- `/capitals` - European capitals quiz
+
+**State Management**: React state + AsyncStorage via `useStorage` hook from shared package
+
+**Component Organization**:
+- `app/` - Expo Router screens (file-based routing)
+- `components/` - React Native components
+- `hooks/` - Mobile-specific hooks (asyncStorageAdapter)
+
+### Shared Package (`packages/shared/`)
+
+Platform-agnostic code shared between web and mobile:
+- **Hooks**: `useInterval`, `useStorage` (with adapter pattern)
+- **Constants**: Game configs, colors, quiz data (FONT_SIZE, FARBEN, CAPITALS, KETTENRECHNER, EUROPE_CAPITALS, STROOP_COLORS)
+- **Types**: GameStatus, GameConfig, utility functions (shuffleArray)
+- **Adapters**:
+  - `localStorageAdapter` (web) in `apps/web/src/hooks/useLocalStorage.ts`
+  - `asyncStorageAdapter` (mobile) in `apps/mobile/hooks/asyncStorageAdapter.ts`
 
 ### Audio System
 
@@ -144,9 +210,18 @@ Create `.env.local` for environment variables (not committed):
 
 ## Development Notes
 
+- **Monorepo**: Uses Turborepo for task orchestration and caching across apps
+- **Package Manager**: Bun 1.1.0+ required (faster than npm/yarn)
 - **Language**: German for UI text and domain comments, English for general code comments
-- **No Backend**: Fully client-side, can deploy to any static host
-- **Testing**: Vitest with React Testing Library and jsdom environment. Test setup in `src/test/setup.ts`
+- **No Backend**: Web app is fully client-side, can deploy to any static host
+- **Testing**: Vitest with React Testing Library and jsdom environment (web app only)
 - **Vite**: HMR enabled, TypeScript errors shown in browser overlay and terminal
-- **Local Storage**: Use Chrome DevTools > Application > Local Storage to debug persistence
+- **Storage**:
+  - Web: localStorage via `localStorageAdapter`
+  - Mobile: AsyncStorage via `asyncStorageAdapter`
+  - Both use the shared `useStorage` hook
+- **Deployment**:
+  - Web app deployed to Vercel
+  - Configured in `vercel.json` with Bun build commands
+  - Production URL: https://training-erik-react-jbwpwrqyi-asds-projects-d827e0fc.vercel.app
 
